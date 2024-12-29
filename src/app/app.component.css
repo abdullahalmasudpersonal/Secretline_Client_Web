@@ -6,9 +6,42 @@
   height: 100vh;
   width: 1500px;
   background-color: rgb(247, 235, 235);
+  display: flex;
+  overflow: hidden;
 }
+
 .mainManu {
   width: 80px;
   height: 100vh;
+  background-color: rgb(118, 9, 139);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.mainManu mat-icon {
+  padding: 8px;
+  border-radius: 50%;
   background-color: gray;
+  margin-bottom: 5px;
+}
+.sideber {
+  height: 100vh;
+  width: 350px;
+  background-color: rgb(209, 159, 243);
+  /* overflow: auto; */
+}
+.sideberTopPart {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: rgb(195, 95, 235);
+}
+.sideberChatPart {
+  /* height: 90vh; */
+  height: auto;
+  overflow: auto;
+  padding: 10px;
+  margin-bottom: 100px;
 }
