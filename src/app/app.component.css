@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+.containerDiv {
+  height: 100vh;
+  width: 1500px;
+  background-color: rgb(247, 235, 235);
+}
+.mainManu {
+  width: 80px;
+  height: 100vh;
+  background-color: gray;
+}
