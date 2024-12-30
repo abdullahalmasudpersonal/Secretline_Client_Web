@@ -22,7 +22,7 @@ export class AppComponent {
 
   selectMenu(menu: string): void {
     this.selectedMenu = menu;
-    this.detailsView = false; // Hide details when menu changes
+    this.detailsView = true; // Hide details when menu changes
   }
 
   showDetails(detailType: string): void {
