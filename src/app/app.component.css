@@ -6,7 +6,7 @@
 .containerDiv {
   height: 100%;
   width: 1500px;
-  background-color: rgb(247, 235, 235);
+  /* background-color: rgb(247, 235, 235); */
   display: flex;
   box-sizing: border-box;
   padding: 15px;
@@ -50,7 +50,11 @@
 }
 .chatContent {
   flex-grow: 1;
-  background-color: rgb(197, 180, 238);
+  background-color: rgb(189, 175, 226);
+}
+.chatDefaultContent {
+  flex-grow: 1;
+  background-color: aquamarine;
 }
 
 /* 

@@ -3,6 +3,7 @@ html,
   height: 100%;
 } */
 body {
+  background-color: rgb(19, 26, 26);
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }

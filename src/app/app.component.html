@@ -1,127 +1,119 @@
-<div class="container">
-  <div class="containerDiv">
+<app-register *ngIf="!isUserAvailable" (userCreated)="updateUserStatus($event)"></app-register>
 
-    <div class="mainManu">
-      <div style="margin-top: 10px;">
-        <div><mat-icon (click)="selectMenu('home')" style="color: rgb(192, 115, 255);">home</mat-icon></div>
-        <div (click)="selectMenu('chat')"><mat-icon style="color: rgb(192, 115, 255);">chat</mat-icon></div>
-        <div><mat-icon (click)="selectMenu('group')" style="color: rgb(192, 115, 255);">group</mat-icon></div>
-      </div>
-      <div style="margin-bottom: 5px;">
-        <div><mat-icon style="color: rgb(192, 115, 255);">chat</mat-icon></div>
-        <div><mat-icon style="color: rgb(192, 115, 255);">chat</mat-icon></div>
+<div>
+  <div class="container" *ngIf="isUserAvailable; else noUser">
+    <div class="containerDiv">
+
+      <div class="mainManu">
+        <div style="margin-top: 10px;">
+          <div><mat-icon (click)="selectMenu('home')" style="color: rgb(192, 115, 255);">home</mat-icon></div>
+          <div (click)="selectMenu('chat')"><mat-icon style="color: rgb(192, 115, 255);">chat</mat-icon></div>
+          <div><mat-icon (click)="selectMenu('group')" style="color: rgb(192, 115, 255);">group</mat-icon></div>
+        </div>
+        <div style="margin-bottom: 5px;">
+          <div><mat-icon style="color: rgb(192, 115, 255);">chat</mat-icon></div>
+          <div><mat-icon style="color: rgb(192, 115, 255);">chat</mat-icon></div>
 
 
-      </div>
-    </div>
-
-    <div class="sideber">
-      <div class="sideberTopPart">
-        <h2 style="margin: 0;">Chats</h2>
-        <div>
-          <mat-icon style="color: rgb(78, 22, 124); margin-right: 15px;">add_box</mat-icon>
-          <mat-icon style="color: rgb(94, 17, 156);">more_vert
-          </mat-icon>
         </div>
       </div>
 
-      <div class="sideberChatPart" *ngIf="selectedMenu === 'home'" (click)="showDetails('homeDetails')">
-        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-          eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-          reiciendis harum hic ipsa. Home</h4>
-        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-          eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-          reiciendis harum hic ipsa. Home</h4>
-        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-          eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-          reiciendis harum hic ipsa. Home</h4>
-        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-          eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-          reiciendis harum hic ipsa. Home</h4>
-        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-          eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-          reiciendis harum hic ipsa. Home</h4>
-        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-          eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-          reiciendis harum hic ipsa. Home</h4>
-        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-          eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-          reiciendis harum hic ipsa. Home</h4>
-        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-          eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-          reiciendis harum hic ipsa. Home</h4>
-        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-          eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-          reiciendis harum hic ipsa. Home</h4>
+      <div class="sideber">
+        <div class="sideberTopPart">
+          <h2 style="margin: 0;">Chats</h2>
+          <div>
+            <mat-icon style="color: rgb(78, 22, 124); margin-right: 15px;">add_box</mat-icon>
+            <mat-icon style="color: rgb(94, 17, 156);">more_vert
+            </mat-icon>
+          </div>
+        </div>
+
+        <div class="sideberChatPart" *ngIf="selectedMenu === 'home'" (click)="showDetails('homeDetails')">
+          <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur
+            aspernatur
+            eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
+            reiciendis harum hic ipsa. Home</h4>
+          <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur
+            aspernatur
+            eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
+            reiciendis harum hic ipsa. Home</h4>
+          <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur
+            aspernatur
+            eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
+            reiciendis harum hic ipsa. Home</h4>
+          <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur
+            aspernatur
+            eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
+            reiciendis harum hic ipsa. Home</h4>
+          <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur
+            aspernatur
+            eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
+            reiciendis harum hic ipsa. Home</h4>
+          <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur
+            aspernatur
+            eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
+            reiciendis harum hic ipsa. Home</h4>
+          <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur
+            aspernatur
+            eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
+            reiciendis harum hic ipsa. Home</h4>
+          <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur
+            aspernatur
+            eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
+            reiciendis harum hic ipsa. Home</h4>
+          <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur
+            aspernatur
+            eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
+            reiciendis harum hic ipsa. Home</h4>
+        </div>
+
+        <div class="sideberChatPart" *ngIf="selectedMenu === 'chat'" (click)="showDetails('chatDetails')">
+          <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur
+            aspernatur
+            eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
+            reiciendis harum hic ipsa. Chat </h4>
+        </div>
+
+        <div class="sideberChatPart" *ngIf="selectedMenu === 'group'" (click)="showDetails('groupDetails')">
+          <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur
+            aspernatur
+            eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
+            reiciendis harum hic ipsa. group</h4>
+        </div>
       </div>
 
-      <div class="sideberChatPart" *ngIf="selectedMenu === 'chat'" (click)="showDetails('chatDetails')">
-        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-          eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-          reiciendis harum hic ipsa. Chat </h4>
+      <!-- Details View -->
+      <div class="chatContent" *ngIf="detailsView">
+        <h2>{{ detailsContent.title }}</h2>
+        <p>{{ detailsContent.description }}</p>
+      </div>
+      <div class="chatDefaultContent" *ngIf="!detailsView">
+        <h1>Default Content</h1>
+        <p>Select an item from the menu to see details here.</p>
       </div>
 
-      <div class="sideberChatPart" *ngIf="selectedMenu === 'group'" (click)="showDetails('groupDetails')">
-        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-          eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-          reiciendis harum hic ipsa. group</h4>
-      </div>
     </div>
-
-    <!-- Details View -->
-    <div class="chatContent" *ngIf="detailsView">
-      <h2>{{ detailsContent.title }}</h2>
-      <p>{{ detailsContent.description }}</p>
-    </div>
-    <div *ngIf="!detailsView">
-      <h1>Default Content</h1>
-      <p>Select an item from the menu to see details here.</p>
-    </div>
-
   </div>
+
+
+  <!-- <ng-template  #noUser  >
+    <app-register />
+  </ng-template> -->
+
+  <ng-template #noUser>
+    <p>User registration form is displayed</p>
+  </ng-template>
+
+  <!-- <ng-template #noUser>
+    <div class="registerContainer">
+      <div class="register">
+        <div class="registerDiv">
+          <h2>Registration</h2>
+          <div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template> -->
+
 </div>
-
-
-<!-- <div>
-  <h2>{{ detailsContent.title }}</h2>
-  <p>{{ detailsContent.description }}</p>
-</div> -->
-
-<!-- <div class="mainManu">
-  <div style="margin-top: 10px;">
-    <div><mat-icon (click)="selectMenu('home')" style="color: rgb(192, 115, 255);">home</mat-icon></div>
-    <div (click)="selectMenu('chat')"><mat-icon style="color: rgb(192, 115, 255);">chat</mat-icon></div>
-    <div><mat-icon (click)="selectMenu('group')" style="color: rgb(192, 115, 255);">group</mat-icon></div>
-  </div>
-  <div style="margin-bottom: 5px;">
-    <div><mat-icon style="color: rgb(192, 115, 255);">chat</mat-icon></div>
-    <div><mat-icon style="color: rgb(192, 115, 255);">chat</mat-icon></div>
-    <div><mat-icon style="color: rgb(192, 115, 255);">chat</mat-icon></div>
-  </div>
-</div> -->
-
-<!-- <div class="sideber">
-   <div class="sideberTopPart">
-    <h2 style="margin: 0;">Chats</h2>
-    <div>
-      <mat-icon style="color: rgb(78, 22, 124); margin-right: 15px;">add_box</mat-icon>
-      <mat-icon style="color: rgb(94, 17, 156);">more_vert
-      </mat-icon>
-    </div>
-  </div>
-  <div class="sideberChatPart" *ngIf="selectedMenu === 'home'" (click)="showDetails('homeDetails')">
-    <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-      eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-      reiciendis harum hic ipsa. Home</h4>
-  </div>
-  <div class="sideberChatPart" *ngIf="selectedMenu === 'chat'" (click)="showDetails('chatDetails')">
-    <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-      eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-      reiciendis harum hic ipsa. Chat </h4>
-  </div>
-  <div class="sideberChatPart" *ngIf="selectedMenu === 'group'" (click)="showDetails('groupDetails')">
-    <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum veniam sapiente consequuntur aspernatur
-      eligendi nisi temporibus blanditiis ratione error molestiae neque nobis assumenda, nam voluptates facere
-      reiciendis harum hic ipsa. group</h4>
-  </div>
-</div> -->
