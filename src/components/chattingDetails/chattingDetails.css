@@ -1,0 +1,142 @@
+/* ----------------------------------------------------- */
+.chatting-details {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: rgb(218, 218, 218);
+}
+/* ------------------------------------- */
+.chatting-details-topberPart {
+  height: 60px;
+  background-color: #7b5d8f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 15px;
+}
+.chatting-details-profile-img {
+  display: flex;
+  align-items: center;
+}
+.chatting-details-profile-img img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.chatting-details-topber-icon {
+  padding: 5px;
+  cursor: pointer;
+  margin-left: 20px;
+  cursor: pointer;
+}
+/* ------------------------------------ */
+.masud {
+  display: flex;
+  flex-direction: column; /* কলাম লেআউট */
+  height: 100vh; /* পুরো ভিউপোর্টের উচ্চতা */
+  background-color: rgb(68, 68, 68); /* ব্যাকগ্রাউন্ড কালার */
+  overflow-y: auto; /* উল্লম্ব স্ক্রল অ্যাক্টিভেট */
+  position: relative; /* পজিশন রিলেটিভ */
+}
+/* .al {
+  display: grid;
+  align-items: end;
+} */
+.abdullah {
+  background-color: white; /* ব্যাকগ্রাউন্ড কালার */
+  text-align: center; /* টেক্সট সেন্টার */
+  padding: 20px; /* প্যাডিং */
+  margin-top: auto; /* এটি পুরোপুরি নিচে অবস্থান করবে */
+}
+.chatting-details-messagesPart {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 50px 10px 50px;
+  scrollbar-width: thin;
+  scrollbar-color: #999999 #a7a7a700;
+}
+.chatting-details-message-div {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+}
+.chatting-details-message-self {
+  background-color: #8162b1;
+  text-align: right;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 10px;
+  align-self: flex-end;
+  width: fit-content;
+}
+.chatting-details-message-reciver {
+  background-color: rgb(73, 79, 167);
+  text-align: left;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 10px;
+  width: fit-content;
+  align-self: flex-start;
+}
+/* ------------------------------------ */
+.chatting-details-bottomberPart {
+  min-height: 60px;
+  background-color: #7b5d8f;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-sizing: border-box;
+  padding: 8px 22px;
+}
+.chatting-details-add-item,
+.chatting-details-voice-msg {
+  flex: 0 0 auto;
+}
+.chatting-details-text {
+  flex: 1;
+  overflow-y: auto;
+}
+.chatting-details-text div {
+  width: 100%;
+  min-height: 45px;
+  border-radius: 5px;
+  background-color: rgb(0, 0, 0);
+  color: white;
+  outline: none;
+  font-size: 15px;
+  padding: 12px;
+  max-height: 100px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: #999999 #a7a7a700;
+}
+.chatting-details-text div[contentEditable][data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: rgb(172, 172, 172);
+  pointer-events: none;
+  padding-left: 4px;
+}
+
+.chatting-details-add-item-icon {
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0;
+  margin: 0;
+}
+.chatting-details-send-icon {
+  cursor: pointer;
+  padding: 10px;
+  margin: 0;
+  font-size: 15px;
+}
+.chatting-details-voice-msg-icon {
+  cursor: pointer;
+  padding: 10px;
+  margin: 0;
+  font-size: 20px;
+}

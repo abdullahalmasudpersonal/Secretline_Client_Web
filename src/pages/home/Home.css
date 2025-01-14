@@ -1,0 +1,92 @@
+.homePage {
+  background-color: rgb(31, 31, 31);
+  height: 100vh;
+  min-height: 400px;
+  padding: 15px !important;
+}
+@media (max-width: 900px) {
+  .homePage {
+    padding: 0 !important;
+  }
+}
+.homeDiv {
+  height: 100%;
+  margin: auto;
+  max-width: 1500px;
+  display: flex;
+}
+/* --------------------------- */
+.mainManu {
+  min-width: 70px;
+  background-color: rgb(48, 51, 61);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-right: 2px solid rgb(59, 65, 78);
+}
+.mainManuDev {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.mainManuIcon {
+  color: rgb(221, 221, 221);
+  margin-top: 10px;
+  padding: 12px 12px;
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 50%;
+}
+.mainManuIcon.active {
+  background-color: rgb(85, 85, 85);
+}
+
+/* --------------------------------- */
+.subManu {
+  min-width: 400px;
+  background-color: rgb(39, 42, 51);
+}
+.chattingUser {
+  height: 75px;
+  /* background-color: rgb(160, 160, 160); */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 10px;
+  color: white;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.chattingUser:hover {
+  background-color: rgba(82, 82, 82, 0.418);
+  cursor: pointer;
+}
+.chattingUser.activeChatUser {
+  background-color: rgba(29, 29, 29, 0.678);
+  border-left: 4px solid #170225;
+  padding-left: 6px;
+}
+.profileimg {
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.548);
+  margin: 0;
+}
+.chattingUserInfo {
+  height: 100%;
+  width: 100%;
+  border-top: 1px solid rgba(97, 97, 97, 0.459);
+  display: flex;
+  align-items: center;
+}
+.chattingUserInfo p {
+  margin: 0;
+}
+
+/* ---------------------------------------- */
+.detailContent {
+  min-width: 400px;
+  width: 100%;
+  background-color: rgb(135, 118, 151);
+}
+.defaultContent {
+  background-color: blue;
+}
