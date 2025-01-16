@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useGetSingleMemberAllUserChatQuery } from "../../redux/features/chat/chatApi";
 import { TChatUser } from "../../types/chat.types";
 import ChattingDetails from "../../components/chattingDetails/ChattingDetails";
+import { formatDate } from "../../utils/lastMessageDateFromatting";
 
 const Home = () => {
   const [activeMenu, setActiveMenu] = useState("chat");
@@ -63,10 +64,18 @@ const Home = () => {
                     >
                       <p>{item?.name}</p>
                       <p>
-                        <small>{item?.lastMessage?.timestamp}</small>
+                        <small>
+                          {formatDate(item?.lastMessage?.timestamp)}
+                        </small>
                       </p>
                     </div>
-                    <p>{item?.lastMessage?.content}</p>
+                    <p>
+                      {item?.lastMessage?.content
+                        ? item?.lastMessage?.content?.length <= 50
+                          ? item?.lastMessage?.content
+                          : item?.lastMessage?.content.slice(0, 45) + "..."
+                        : ""}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -212,7 +221,12 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="subManu">{renderSubMenu()}</div>
+        <div className="subManu">
+          <div>
+            <h4>Masud</h4>
+          </div>
+          <div>{renderSubMenu()}</div>
+        </div>
 
         <div className="detailContent">{renderDetailContent()}</div>
       </div>

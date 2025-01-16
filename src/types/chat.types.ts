@@ -15,10 +15,10 @@ export type TChatUser = {
 };
 
 export type TChat = {
-  _id: string;
-  chatId: string;
-  content: string;
-  messageType: string;
-  senderId: string;
-  timestamp: string;
+  _id?: string;
+  chatId?: string;
+  content?: string;
+  messageType?: string;
+  senderId?: string;
+  timestamp?: string;
 };

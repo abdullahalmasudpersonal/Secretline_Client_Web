@@ -31,24 +31,6 @@
   cursor: pointer;
 }
 /* ------------------------------------ */
-.masud {
-  display: flex;
-  flex-direction: column; /* কলাম লেআউট */
-  height: 100vh; /* পুরো ভিউপোর্টের উচ্চতা */
-  background-color: rgb(68, 68, 68); /* ব্যাকগ্রাউন্ড কালার */
-  overflow-y: auto; /* উল্লম্ব স্ক্রল অ্যাক্টিভেট */
-  position: relative; /* পজিশন রিলেটিভ */
-}
-/* .al {
-  display: grid;
-  align-items: end;
-} */
-.abdullah {
-  background-color: white; /* ব্যাকগ্রাউন্ড কালার */
-  text-align: center; /* টেক্সট সেন্টার */
-  padding: 20px; /* প্যাডিং */
-  margin-top: auto; /* এটি পুরোপুরি নিচে অবস্থান করবে */
-}
 .chatting-details-messagesPart {
   display: flex;
   flex-direction: column;
@@ -65,12 +47,13 @@
 }
 .chatting-details-message-self {
   background-color: #8162b1;
-  text-align: right;
+  text-align: left;
   margin: 5px 0;
   padding: 10px;
   border-radius: 10px;
   align-self: flex-end;
   width: fit-content;
+  max-width: 600px;
 }
 .chatting-details-message-reciver {
   background-color: rgb(73, 79, 167);
@@ -80,6 +63,7 @@
   border-radius: 10px;
   width: fit-content;
   align-self: flex-start;
+  max-width: 600px;
 }
 /* ------------------------------------ */
 .chatting-details-bottomberPart {
