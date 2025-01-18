@@ -36,6 +36,8 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
   //   return data?.data || [];
   // }, [data]);
 
+  console.log("Active SubMenu:", activeSubMenu);
+
   // setMessages  সার্ভার থেকে মেসেজ লোড করুন
   useEffect(() => {
     if (data?.data) {

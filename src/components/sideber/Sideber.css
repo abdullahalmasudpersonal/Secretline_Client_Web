@@ -1,22 +1,3 @@
-.homePage {
-  background-color: rgb(31, 31, 31);
-  height: 100vh;
-  min-height: 500px;
-  padding: 15px !important;
-}
-@media (max-width: 900px) {
-  .homePage {
-    padding: 0 !important;
-  }
-}
-.homeDiv {
-  height: 100%;
-  margin: auto;
-  max-width: 1500px;
-  display: flex;
-}
-
-/* --------------------------------- */
 .subManu {
   min-width: 400px;
   background-color: rgb(39, 42, 51);
@@ -64,11 +45,4 @@
 }
 .chattingUserInfo p {
   margin: 0;
-}
-
-/* ---------------------------------------- */
-.detailContent {
-  min-width: 400px;
-  width: 100%;
-  background-color: rgb(135, 118, 151);
 }

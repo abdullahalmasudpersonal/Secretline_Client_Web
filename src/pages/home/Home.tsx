@@ -1,16 +1,14 @@
-import {
-  faCommentAlt,
-  faGear,
-  faUserCircle,
-} from "@fortawesome/free-solid-svg-icons";
 import "./Home.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
 import { useState } from "react";
 import { useGetSingleMemberAllUserChatQuery } from "../../redux/features/chat/chatApi";
 import { TChatUser } from "../../types/chat.types";
 import ChattingDetails from "../../components/chattingDetails/ChattingDetails";
 import { formatDate } from "../../utils/lastMessageDateFromatting";
+import MainMenu from "../../components/mainManu/MainManu";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisVertical, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useGetProfileQuery } from "../../redux/features/profile/profileApi";
+import DefaultContent from "../../components/defaultContent/DefaultContent";
 
 const Home = () => {
   const [activeMenu, setActiveMenu] = useState("chat");
@@ -18,25 +16,56 @@ const Home = () => {
   const [activeSubMenu, setActiveSubMenu] = useState<TChatUser | string | null>(
     null
   );
+  const { data } = useGetProfileQuery({});
+  // console.log(data, "data");
+
   const handleMainMenuClick = (menu: string) => {
     if (menu !== activeMenu) {
       setActiveMenu(menu);
     }
   };
-  const handleSubMenuClick = (submenu: TChatUser) => {
-    setActiveChatUser(submenu.chatId);
-    setActiveSubMenu(submenu);
-  };
+
   const handleSubMenuClick2 = (submenu: string) => {
     setActiveSubMenu(submenu);
   };
 
+  const handleSubMenuClick = (submenu: TChatUser) => {
+    setActiveChatUser(submenu.chatId);
+    setActiveSubMenu(submenu);
+  };
+
   const { data: allUserChat } = useGetSingleMemberAllUserChatQuery({});
+
   const renderSubMenu = () => {
     switch (activeMenu) {
       case "chat":
         return (
           <>
+            <div className="sideberChatTopPart">
+              <h2 style={{ margin: 0 }}>Chats</h2>
+              <div>
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  style={{
+                    border: "2px solid rgb(211, 211, 211)",
+                    color: "rgb(226, 226, 226)",
+                    borderRadius: "3px",
+                    padding: "0px 3px",
+                    fontSize: "12px",
+                    marginRight: "30px",
+                    cursor: "pointer",
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={faEllipsisVertical}
+                  style={{
+                    color: "rgb(226, 226, 226)",
+                    fontSize: "18px",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+            </div>
             {allUserChat?.data?.map((item: TChatUser, index: number) => (
               <div
                 className={`chattingUser ${
@@ -104,9 +133,7 @@ const Home = () => {
       case "profile":
         return (
           <div className="subMenuItem">
-            <div onClick={() => handleSubMenuClick2("profile")}>
-              Profile Submenu
-            </div>
+            <div>{data?.data?.name}</div>
           </div>
         );
       default:
@@ -116,21 +143,13 @@ const Home = () => {
 
   const renderDetailContent = () => {
     if (!activeSubMenu) {
-      return <div>Default Content</div>;
+      return <DefaultContent />;
     }
 
-    // if (!activeSubMenu && !activeChatUser) {
-    //   return <div>Default Content</div>;
-    // }
-
-    if (activeMenu === "chat" && typeof activeSubMenu === "object") {
+    if (typeof activeSubMenu === "object") {
       return (
         <>
           <ChattingDetails activeSubMenu={activeSubMenu} />
-          {/* <h3>{activeSubMenu.name}</h3> */}
-          {/* <h3>{activeSubMenu.name}</h3>
-          <p>Last Message: {activeSubMenu.lastMessage?.content}</p>
-          <p>Timestamp: {activeSubMenu.lastMessage?.timestamp}</p> */}
         </>
       );
     }
@@ -154,22 +173,7 @@ const Home = () => {
             <div>Settings Details</div>
           </div>
         );
-      case "profile":
-        return (
-          <div>
-            <div>Profile Details</div>
-          </div>
-        );
       default:
-        // if (activeMenu === "chat" && typeof activeSubMenu !== "string") {
-        //   return (
-        //     <div>
-        //       <h3>{activeSubMenu.name}</h3>
-        //       <p>Last Message: {activeSubMenu.lastMessage?.content}</p>
-        //       <p>Timestamp: {activeSubMenu.lastMessage?.timestamp}</p>
-        //     </div>
-        //   );
-        // }
         return null;
     }
   };
@@ -177,56 +181,12 @@ const Home = () => {
   return (
     <div className="homePage">
       <div className="homeDiv">
-        <div className="mainManu">
-          <div style={{ marginTop: "5px" }}>
-            <div>
-              <FontAwesomeIcon
-                onClick={() => handleMainMenuClick("chat")}
-                className={`mainManuIcon ${
-                  activeMenu === "chat" ? "active" : ""
-                }`}
-                icon={faCommentAlt}
-              />
-            </div>
-            <div>
-              <FontAwesomeIcon
-                onClick={() => handleMainMenuClick("users")}
-                className={`mainManuIcon ${
-                  activeMenu === "users" ? "active" : ""
-                }`}
-                icon={faUsers}
-                style={{ fontSize: "20px", padding: "12px 10px" }}
-              />
-            </div>
-          </div>
-          <div style={{ marginBottom: "15px" }}>
-            <div>
-              <FontAwesomeIcon
-                onClick={() => handleMainMenuClick("settings")}
-                className={`mainManuIcon ${
-                  activeMenu === "settings" ? "active" : ""
-                }`}
-                icon={faGear}
-              />
-            </div>
-            <div>
-              <FontAwesomeIcon
-                onClick={() => handleMainMenuClick("profile")}
-                className={`mainManuIcon ${
-                  activeMenu === "profile" ? "active" : ""
-                }`}
-                icon={faUserCircle}
-              />
-            </div>
-          </div>
-        </div>
+        <MainMenu
+          activeMenu={activeMenu}
+          handleMainMenuClick={handleMainMenuClick}
+        />
 
-        <div className="subManu">
-          <div>
-            <h4>Masud</h4>
-          </div>
-          <div>{renderSubMenu()}</div>
-        </div>
+        <div className="subManu">{renderSubMenu()}</div>
 
         <div className="detailContent">{renderDetailContent()}</div>
       </div>
@@ -235,6 +195,41 @@ const Home = () => {
 };
 
 export default Home;
+
+// case "chat":
+//   return (
+//     <div>
+//       {chatUser.map((item) => (
+//         <h6 onClick={() => handleUserClick(item)}>{item.name}</h6>
+//       ))}
+//     </div>
+//   );
+
+// if (activeMenu === "chat" && typeof activeSubMenu === "object") {
+//   return (
+//     <>
+//       <ChattingDetails activeSubMenu={activeSubMenu} />
+//     </>
+//   );
+// }
+
+{
+  /* <Sideber renderSubMenu={renderSubMenu} /> */
+}
+
+// if (!activeSubMenu && !activeChatUser) {
+//   return <div>Default Content</div>;
+// }
+
+// if (activeMenu === "chat" && typeof activeSubMenu !== "string") {
+//   return (
+//     <div>
+//       <h3>{activeSubMenu.name}</h3>
+//       <p>Last Message: {activeSubMenu.lastMessage?.content}</p>
+//       <p>Timestamp: {activeSubMenu.lastMessage?.timestamp}</p>
+//     </div>
+//   );
+// }
 
 /* 
    // if (activeMenu === "chat" && typeof activeSubMenu === "object") {
