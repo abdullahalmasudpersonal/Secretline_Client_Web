@@ -1,12 +1,18 @@
 import "./Home.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useGetSingleMemberAllUserChatQuery } from "../../redux/features/chat/chatApi";
 import { TChatUser } from "../../types/chat.types";
 import ChattingDetails from "../../components/chattingDetails/ChattingDetails";
 import { formatDate } from "../../utils/lastMessageDateFromatting";
 import MainMenu from "../../components/mainManu/MainManu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowDown,
+  faEllipsisVertical,
+  faPlus,
+  faSearch,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { useGetProfileQuery } from "../../redux/features/profile/profileApi";
 import DefaultContent from "../../components/defaultContent/DefaultContent";
 
@@ -36,36 +42,76 @@ const Home = () => {
 
   const { data: allUserChat } = useGetSingleMemberAllUserChatQuery({});
 
+  // /////////////////////////////////////
+  const [isFocused, setIsFocused] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  // ইনপুট রিসেট ফাংশন
+  const resetInput = () => {
+    setInputValue("");
+    inputRef.current?.focus();
+  };
+
   const renderSubMenu = () => {
     switch (activeMenu) {
       case "chat":
         return (
           <>
             <div className="sideberChatTopPart">
-              <h2 style={{ margin: 0 }}>Chats</h2>
               <div>
+                <h2 style={{ margin: 0 }}>Chats</h2>
+                <div>
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    style={{
+                      border: "2px solid rgb(211, 211, 211)",
+                      color: "rgb(226, 226, 226)",
+                      borderRadius: "3px",
+                      padding: "0px 3px",
+                      fontSize: "12px",
+                      marginRight: "30px",
+                      cursor: "pointer",
+                    }}
+                  />
+                  <FontAwesomeIcon
+                    icon={faEllipsisVertical}
+                    style={{
+                      color: "rgb(226, 226, 226)",
+                      fontSize: "18px",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="chatSearchBer">
                 <FontAwesomeIcon
-                  icon={faPlus}
-                  style={{
-                    border: "2px solid rgb(211, 211, 211)",
-                    color: "rgb(226, 226, 226)",
-                    borderRadius: "3px",
-                    padding: "0px 3px",
-                    fontSize: "12px",
-                    marginRight: "30px",
-                    cursor: "pointer",
+                  className={`chatSearchIcon ${isFocused ? "rotated" : ""}`}
+                  icon={isFocused ? faArrowDown : faSearch}
+                />
+                <input
+                  ref={inputRef}
+                  placeholder={isFocused ? "" : "Search"}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onFocus={() => {
+                    setIsFocused(true);
+                  }}
+                  onBlur={() => {
+                    if (inputValue === "") {
+                      setIsFocused(false);
+                    }
                   }}
                 />
-                <FontAwesomeIcon
-                  icon={faEllipsisVertical}
-                  style={{
-                    color: "rgb(226, 226, 226)",
-                    fontSize: "18px",
-                    cursor: "pointer",
-                  }}
-                />
+                {inputValue && (
+                  <FontAwesomeIcon
+                    className="chatCloseIcon"
+                    icon={faXmark}
+                    onClick={resetInput}
+                  />
+                )}
               </div>
             </div>
+
             {allUserChat?.data?.map((item: TChatUser, index: number) => (
               <div
                 className={`chattingUser ${
