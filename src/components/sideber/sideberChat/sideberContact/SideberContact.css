@@ -1,0 +1,72 @@
+.newChatContainer {
+  height: 100%;
+  color: rgb(255, 255, 255);
+}
+/* ------------- Top part --------------------- */
+.newChatTopPart {
+  padding: 12px;
+}
+.contactSearchBer {
+  position: relative;
+}
+.contactSearchBer input {
+  margin-top: 22px;
+  width: 100%;
+  border-radius: 5px;
+  height: 30px;
+  background-color: rgb(69, 72, 83);
+  border: none;
+  outline: none;
+  padding: 10px 30px 10px 54px;
+  color: rgb(224, 224, 224);
+}
+.contactSearchIcon {
+  position: absolute;
+  bottom: 9px;
+  left: 13px;
+  font-size: 13px;
+  transition: transform 0.5s ease;
+}
+.contactSearchIcon.rotated {
+  transform: rotate(90deg);
+}
+.searchContactClearIcon {
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
+  padding: 3px 5px;
+  cursor: pointer;
+}
+/* --------------------- Contact Part -------------------- */
+.contactUser {
+  height: 75px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-left: 13px;
+
+  color: white;
+  /* overflow: hidden; */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.contactUser:hover {
+  background-color: rgba(82, 82, 82, 0.418);
+  cursor: pointer;
+}
+.contactUserIcon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid rgba(221, 36, 36, 0.548);
+  margin: 0;
+}
+.contactUserInfo {
+  height: 100%;
+  width: 100%;
+  border-top: 1px solid rgba(97, 97, 97, 0.459);
+  display: flex;
+  align-items: center;
+}
+.contactUserInfo p {
+  margin: 0;
+}

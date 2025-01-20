@@ -19,86 +19,10 @@
 /* --------------------------------- */
 .subManu {
   min-width: 400px;
+  width: 400px;
   background-color: rgb(39, 42, 51);
   color: white;
   border-right: 0.5px solid rgb(77, 77, 77);
-}
-/* --------------- */
-.sideberChatTopPart {
-  padding: 13px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.sideberChatTopPart > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.chatSearchBer {
-  position: relative;
-}
-.chatSearchIcon {
-  position: absolute;
-  bottom: 9px;
-  left: 13px;
-  font-size: 13px;
-  transition: transform 0.5s ease;
-}
-.chatSearchIcon.rotated {
-  transform: rotate(90deg); /* ঘূর্ণন */
-}
-.chatSearchBer input {
-  margin-top: 22px;
-  width: 100%;
-  border-radius: 5px;
-  height: 30px;
-  background-color: rgb(69, 72, 83);
-  border: none;
-  outline: none;
-  padding: 10px 30px 10px 54px;
-  color: rgb(224, 224, 224);
-}
-.chatCloseIcon {
-  position: absolute;
-  right: 6px;
-  bottom: 4px;
-  padding: 3px 5px;
-  cursor: pointer;
-}
-/* --------------- */
-.chattingUser {
-  height: 75px;
-  /* background-color: rgb(160, 160, 160); */
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-left: 10px;
-  color: white;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-.chattingUser:hover {
-  background-color: rgba(82, 82, 82, 0.418);
-  cursor: pointer;
-}
-.chattingUser.activeChatUser {
-  background-color: rgba(29, 29, 29, 0.678);
-  border-left: 4px solid #170225;
-  padding-left: 6px;
-}
-.profileimg {
-  border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.548);
-  margin: 0;
-}
-.chattingUserInfo {
-  height: 100%;
-  width: 100%;
-  border-top: 1px solid rgba(97, 97, 97, 0.459);
-  display: flex;
-  align-items: center;
-}
-.chattingUserInfo p {
-  margin: 0;
 }
 
 /* ---------------------------------------- */
