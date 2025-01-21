@@ -36,8 +36,8 @@ const Login: React.FC = () => {
       const res = await login(userInfo).unwrap();
       const user = verifyToken(res.data.accessToken) as TUser;
       dispatch(setUser({ user: user, token: res.data.accessToken }));
-      const toastId = toast.loading("Logging in...");
-      toast.success("Logged in successfully!", { id: toastId, duration: 2000 });
+      // const toastId = toast.loading("Logging in...");
+      // toast.success("Logged in successfully!", { id: toastId, duration: 2000 });
 
       // navigate(from, { replace: true });
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

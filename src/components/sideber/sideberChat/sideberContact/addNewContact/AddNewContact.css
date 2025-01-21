@@ -1,0 +1,61 @@
+.addNewContact {
+  height: 100%;
+}
+.addNewContactBackNavigate {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 0 30px;
+}
+.addNewContactInputDiv {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 0 30px;
+}
+.addNewContactInput {
+  height: 30px;
+  width: 100%;
+  outline: none;
+  background: none;
+  border: none;
+  color: rgb(255, 255, 255);
+  border-bottom: 2px solid rgb(177, 177, 177);
+}
+.addNewContactInput:focus {
+  border-bottom: 2px solid rgb(184, 73, 218);
+}
+.saveNewContactDiv {
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.saveNewContactButton {
+  padding: 10px 20px;
+  background-color: rgb(49, 136, 49);
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+.checkExistsEmailError p {
+  color: rgb(173, 123, 123);
+  margin: 0;
+  margin-top: -10px;
+  padding-left: 70px;
+}
+
+/* ----------------------- */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox এর জন্য */
+}
