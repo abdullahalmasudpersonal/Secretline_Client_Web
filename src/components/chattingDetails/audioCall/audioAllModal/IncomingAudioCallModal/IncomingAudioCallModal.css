@@ -1,0 +1,77 @@
+.incommingAudioCallInfoDiv {
+  height: 198px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+}
+.incommingAudioCallInfoDiv p {
+  margin: 0;
+}
+.incommingAudioCallIcon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  padding: 12px 0px 0px 0px;
+  background-color: #6b6b6b;
+  border: 2px solid rgb(211, 211, 211);
+}
+
+/* --------------------- button part ----------------------------- */
+.audioCallBtnDiv {
+  width: 100%;
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 100px;
+  box-sizing: border-box;
+  padding: 15px;
+}
+.acceptAudioCallBtn {
+  padding: 12px 13px;
+  border-radius: 50%;
+  border: none;
+  font-size: 17px;
+  background-color: rgb(0, 177, 0);
+  color: rgb(233, 233, 233);
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  position: relative;
+  border: solid 2px #3cd450;
+  animation: play 2s ease infinite;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+@keyframes play {
+  0% {
+    transform: scale(1);
+  }
+  5% {
+    box-shadow: 0 0 0 5px rgba(17, 112, 17, 0.808);
+  }
+  10% {
+    box-shadow: 0 0 0 7px rgba(43, 228, 68, 0.4),
+      0 0 0 14px rgba(30, 209, 30, 0.2);
+  }
+  15% {
+    box-shadow: 0 0 0 10px rgba(32, 179, 44, 0.4),
+      0 0 0 20px rgba(65, 219, 51, 0.2);
+  }
+}
+
+.rejectAudioCallBtn {
+  padding: 12px 13px;
+  border-radius: 50%;
+  border: none;
+  font-size: 17px;
+  background-color: rgb(177, 0, 0);
+  color: rgb(233, 233, 233);
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border: solid 2px #d43c3c;
+}

@@ -107,12 +107,17 @@ const SideberChat = ({
               onClick={() => handleSubMenuClick(item)}
             >
               <div>
-                <img
-                  className="profileimg"
-                  src="https://thumbs.dreamstime.com/b/portrait-young-handsome-happy-man-wearing-glasses-casual-smart-blue-clothing-yellow-color-background-square-composition-200740125.jpg"
-                  width="50px"
-                  height="50px"
-                />
+                <svg
+                  className="chattingUserIcon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={50}
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"
+                    fill="rgb(197, 197, 197)"
+                  />
+                </svg>
               </div>
 
               <div className="chattingUserInfo">

@@ -64,6 +64,7 @@ const AddNewContact = ({ setAddContact }: AddNewContactProps) => {
   };
 
   const onFinish: SubmitHandler<FormValues> = async (data) => {
+    // console.log(data, "data");
     const res = await createNewContact(data);
     if (res) {
       toast.success("New contact create successfully");
@@ -119,24 +120,21 @@ const AddNewContact = ({ setAddContact }: AddNewContactProps) => {
                   e.currentTarget.value = e.currentTarget.value.slice(0, 11);
                 }
               }}
-              {...register("phone", { required: true })}
+              {...register("phone", { required: true, minLength: 11 })}
               placeholder="Enter phone"
               autoComplete="off"
               className="addNewContactInput"
             />
           </div>
-
-          {!emailError && (
-            <div className="saveNewContactDiv">
-              <button
-                className="saveNewContactButton"
-                disabled={!!emailError}
-                type="submit"
-              >
-                Save
-              </button>
-            </div>
-          )}
+          <div className="saveNewContactDiv">
+            <button
+              className="saveNewContactButton"
+              disabled={!!emailError}
+              type="submit"
+            >
+              Save
+            </button>
+          </div>
         </form>
       </div>
     </div>

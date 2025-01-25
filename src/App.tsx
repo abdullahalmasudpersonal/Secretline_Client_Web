@@ -1,3 +1,4 @@
+import AudioCall from "./components/chattingDetails/audioCall/AudioCall";
 import "./index.css";
 import Home from "./pages/home/Home";
 import Login from "./pages/logins/Login";
@@ -7,9 +8,13 @@ import socket from "./utils/Socket";
 
 function App() {
   const user = useAppSelector(selectCurrentUser);
-
-  socket.on("connect", () => {});
-
+  socket.on("connect", () => {
+    socket.emit("userOnline", user?.userId);
+  });
+  // socket.on("receiveCallOffer", async ({ userId, from, offer }) => {
+  //    setIncomingCall({ userId, from, offer });
+  // });
+  <AudioCall />;
   return <>{user ? <Home /> : <Login />}</>;
 }
 

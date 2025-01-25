@@ -54,21 +54,23 @@
   gap: 10px;
   padding-left: 10px;
   color: white;
-  /* overflow: hidden; */
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 .chattingUser:hover {
-  background-color: rgba(82, 82, 82, 0.418);
+  background-color: rgba(87, 87, 87, 0.418);
   cursor: pointer;
 }
 .chattingUser.activeChatUser {
-  background-color: rgba(29, 29, 29, 0.678);
-  border-left: 4px solid #170225;
+  background-color: rgba(85, 85, 85, 0.678);
+  border-left: 4px solid #929292;
   padding-left: 6px;
 }
-.profileimg {
+.chattingUserIcon {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  margin: 0;
+  padding: 12px 0px 0px 0px;
+  background-color: #777777;
 }
 .chattingUserInfo {
   height: 100%;
