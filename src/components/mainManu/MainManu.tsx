@@ -1,11 +1,8 @@
-import {
-  faCommentAlt,
-  faGear,
-  faUserCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCommentAlt, faGear } from "@fortawesome/free-solid-svg-icons";
 import { faUsers } from "@fortawesome/free-solid-svg-icons/faUsers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./MainMenu.css";
+import { useGetProfileQuery } from "../../redux/features/profile/profileApi";
 
 interface MainMenuProps {
   activeMenu: string;
@@ -13,6 +10,9 @@ interface MainMenuProps {
 }
 
 const MainMenu = ({ activeMenu, handleMainMenuClick }: MainMenuProps) => {
+  const { data } = useGetProfileQuery({});
+  const profileImg = data?.data?.profileImg || "";
+
   return (
     <div className="mainManu">
       <div style={{ marginTop: "5px" }}>
@@ -42,13 +42,13 @@ const MainMenu = ({ activeMenu, handleMainMenuClick }: MainMenuProps) => {
             icon={faGear}
           />
         </div>
-        <div>
-          <FontAwesomeIcon
+        <div style={{ display: "flex", marginTop: "10px" }}>
+          <img
             onClick={() => handleMainMenuClick("profile")}
-            className={`mainManuIcon ${
+            className={`mainManuImg ${
               activeMenu === "profile" ? "active" : ""
             }`}
-            icon={faUserCircle}
+            src={profileImg}
           />
         </div>
       </div>

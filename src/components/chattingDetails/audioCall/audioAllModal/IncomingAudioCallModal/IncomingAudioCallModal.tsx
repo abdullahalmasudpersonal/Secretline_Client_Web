@@ -12,7 +12,8 @@ const style = {
   height: 330,
   borderRadius: "5px",
   color: "white",
-  bgcolor: "rgb(63, 63, 65)",
+  backgroundImage:
+    "linear-gradient(62deg,rgb(45, 35, 99) 0%,rgb(76, 29, 95) 100%)",
   boxShadow: 24,
   boxSizing: "border-box",
   border: "none",
@@ -30,8 +31,8 @@ type AudioCallModalProps = {
 };
 const IncomingAudioCallModal = ({
   incomingCallModal,
-  incomingCall,
-}: AudioCallModalProps) => {
+}: // incomingCall,
+AudioCallModalProps) => {
   return (
     <>
       <Modal
@@ -48,7 +49,7 @@ const IncomingAudioCallModal = ({
       >
         <Fade in={incomingCallModal}>
           <Box sx={style}>
-            <p
+            {/* <p
               style={{
                 margin: "0",
                 marginTop: "20px",
@@ -57,8 +58,7 @@ const IncomingAudioCallModal = ({
               }}
             >
               InCommingCall...
-            </p>
-            {/*   <button onClick={receiveCall}>Accept</button> */}
+            </p> */}
             <div className="incommingAudioCallInfoDiv">
               <div
                 style={{

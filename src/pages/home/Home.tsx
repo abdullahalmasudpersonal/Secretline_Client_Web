@@ -3,10 +3,9 @@ import { useState } from "react";
 import { TChatUser } from "../../types/chat.types";
 import ChattingDetails from "../../components/chattingDetails/ChattingDetails";
 import MainMenu from "../../components/mainManu/MainManu";
-
-import { useGetProfileQuery } from "../../redux/features/profile/profileApi";
 import DefaultContent from "../../components/defaultContent/DefaultContent";
 import SideberChat from "../../components/sideber/sideberChat/SideberChat";
+import Profile from "../components/profile/Profile";
 
 const Home = () => {
   const [activeMenu, setActiveMenu] = useState("chat");
@@ -14,7 +13,7 @@ const Home = () => {
   const [activeSubMenu, setActiveSubMenu] = useState<TChatUser | string | null>(
     null
   );
-  const { data } = useGetProfileQuery({});
+
   // console.log(data, "data");
 
   const handleMainMenuClick = (menu: string) => {
@@ -61,11 +60,7 @@ const Home = () => {
           </div>
         );
       case "profile":
-        return (
-          <div className="subMenuItem">
-            <div>{data?.data?.name}</div>
-          </div>
-        );
+        return <Profile />;
       default:
         return null;
     }

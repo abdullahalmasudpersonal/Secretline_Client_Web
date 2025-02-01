@@ -2,8 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./AudioCall.css";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import socket from "../../../utils/Socket";
-import { useAppSelector } from "../../../redux/hooks";
-import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
+// import { useAppSelector } from "../../../redux/hooks";
+// import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -32,10 +32,10 @@ type TAudioCallProps = {
 };
 
 const AudioCall = ({ activeUserId }: TAudioCallProps) => {
-  const currentUser = useAppSelector(selectCurrentUser);
+  // const currentUser = useAppSelector(selectCurrentUser);
   const [incomingCall, setIncomingCall] = useState<IncomingCall | null>(null);
-  const [outgoingCall, setOutgoingCall] = useState();
-  const [incomingCallModal, setIncomingCallModal] = useState(true);
+  // const [outgoingCall, setOutgoingCall] = useState();
+  const [incomingCallModal /* setIncomingCallModal */] = useState(true);
   const [outgoingCallModal, setOutgoingCallModal] = useState(false);
 
   useEffect(() => {

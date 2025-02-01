@@ -23,7 +23,7 @@ const Login: React.FC = () => {
 
   // // ///////////////// Login from ///////////////////////////////
   const { register, handleSubmit } = useForm<FormValues>();
-  const [passVisible, setPassVisible] = useState(false);
+  const [passVisible /* setPassVisible */] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const [login] = useLoginMutation();

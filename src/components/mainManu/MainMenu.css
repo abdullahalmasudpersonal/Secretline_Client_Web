@@ -16,6 +16,17 @@
   font-size: 20px;
   border-radius: 50%;
 }
+.mainManuImg {
+  width: 42px;
+  height: 42px;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  margin: auto;
+}
+.mainManuImg.active {
+  background-color: rgb(85, 85, 85);
+}
 .mainManuIcon.active {
   background-color: rgb(85, 85, 85);
 }

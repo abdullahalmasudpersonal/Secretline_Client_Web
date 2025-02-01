@@ -17,10 +17,10 @@ interface IncomingCall {
 const AudioCall2 = ({ activeUserId }: TAudioCallProps) => {
   const [OutGoingAudioCallModalOpen, setOutGoingAudioCallModalOpen] =
     useState(false);
-  const [incomingCallModal, setIncomingCallModal] = useState(true);
+  const [incomingCallModal /* setIncomingCallModal */] = useState(true);
   const [incomingCall, setIncomingCall] = useState<IncomingCall | null>(null);
   const [outGoingAudioCall, setOutGoingAudioCall] = useState(false);
-  const [connectedUserId, setConnectedUserId] = useState<string>("");
+  const [connectedUserId /* setConnectedUserId */] = useState<string>("");
 
   const localAudio = useRef<HTMLAudioElement>(null);
   const remoteAudio = useRef<HTMLAudioElement>(null);
@@ -56,82 +56,83 @@ const AudioCall2 = ({ activeUserId }: TAudioCallProps) => {
   });
 
   // কল রিসিভ করা (Receiver)
-  const receiveCall = async () => {
-    if (!incomingCall) return;
+  // const receiveCall = async () => {
+  //   if (!incomingCall) return;
 
-    // চেক করুন সিগন্যালিং স্টেট
-    // if (peerConnection.current.signalingState === "stable") {
-    //   console.error("Invalid signaling state");
-    //   return;
-    // }
+  //   // চেক করুন সিগন্যালিং স্টেট
+  //   // if (peerConnection.current.signalingState === "stable") {
+  //   //   console.error("Invalid signaling state");
+  //   //   return;
+  //   // }
 
-    // const localStream = await navigator.mediaDevices.getUserMedia({
-    //   audio: true,
-    // });
-    // if (localAudio.current) localAudio.current.srcObject = localStream;
+  //   // const localStream = await navigator.mediaDevices.getUserMedia({
+  //   //   audio: true,
+  //   // });
+  //   // if (localAudio.current) localAudio.current.srcObject = localStream;
 
-    // localStream.getTracks().forEach((track) => {
-    //   peerConnection.current.addTrack(track, localStream);
-    // });
+  //   // localStream.getTracks().forEach((track) => {
+  //   //   peerConnection.current.addTrack(track, localStream);
+  //   // });
 
-    // //  //// Remote description set করার আগে, নিশ্চিত করুন এটি স্টেবল না
-    // if (peerConnection.current.signalingState === "stable") {
-    //   console.error("Invalid signaling state");
-    //   return;
-    // }
-    // সিগন্যালিং স্টেট চেক করা
-    if (peerConnection.current.signalingState !== "stable") {
-      console.log("Waiting for valid signaling state...");
-      // কিছু বিলম্বের পর চেষ্টা করা
-      setTimeout(async () => {
-        try {
-          await peerConnection.current.setRemoteDescription(
-            new RTCSessionDescription(incomingCall.offer)
-          );
+  //   // //  //// Remote description set করার আগে, নিশ্চিত করুন এটি স্টেবল না
+  //   // if (peerConnection.current.signalingState === "stable") {
+  //   //   console.error("Invalid signaling state");
+  //   //   return;
+  //   // }
+  //   // সিগন্যালিং স্টেট চেক করা
+  //   if (peerConnection.current.signalingState !== "stable") {
+  //     console.log("Waiting for valid signaling state...");
+  //     // কিছু বিলম্বের পর চেষ্টা করা
+  //     setTimeout(async () => {
+  //       try {
+  //         await peerConnection.current.setRemoteDescription(
+  //           new RTCSessionDescription(incomingCall.offer)
+  //         );
 
-          const answer = await peerConnection.current.createAnswer();
-          await peerConnection.current.setLocalDescription(answer);
+  //         const answer = await peerConnection.current.createAnswer();
+  //         await peerConnection.current.setLocalDescription(answer);
 
-          socket.emit("answer", { target: incomingCall.callerId, answer });
-          setConnectedUserId(incomingCall.callerId);
-          setOutGoingAudioCall(true);
-          console.log("Answer sent", incomingCall.callerId, answer);
-        } catch (error) {
-          console.error("Error during call reception:", error);
-        }
-      }, 1000); // 1 সেকেন্ড পরে ট্রাই
-      return;
-    }
+  //         socket.emit("answer", { target: incomingCall.callerId, answer });
+  //         setConnectedUserId(incomingCall.callerId);
+  //         setOutGoingAudioCall(true);
+  //         console.log("Answer sent", incomingCall.callerId, answer);
+  //       } catch (error) {
+  //         console.error("Error during call reception:", error);
+  //       }
+  //     }, 1000); // 1 সেকেন্ড পরে ট্রাই
+  //     return;
+  //   }
 
-    // রিমোট ডেসক্রিপশন সেট করা
-    try {
-      await peerConnection.current.setRemoteDescription(
-        new RTCSessionDescription(incomingCall.offer)
-      );
+  //   // রিমোট ডেসক্রিপশন সেট করা
+  //   try {
+  //     await peerConnection.current.setRemoteDescription(
+  //       new RTCSessionDescription(incomingCall.offer)
+  //     );
 
-      const answer = await peerConnection.current.createAnswer();
-      await peerConnection.current.setLocalDescription(answer);
+  //     const answer = await peerConnection.current.createAnswer();
+  //     await peerConnection.current.setLocalDescription(answer);
 
-      socket.emit("answer", { target: incomingCall.callerId, answer });
-      setConnectedUserId(incomingCall.callerId);
-      setOutGoingAudioCall(true);
-      console.log("Answer sent", incomingCall.callerId, answer);
-    } catch (error) {
-      console.error("Error during call reception:", error);
-    }
+  //     socket.emit("answer", { target: incomingCall.callerId, answer });
+  //     setConnectedUserId(incomingCall.callerId);
+  //     setOutGoingAudioCall(true);
+  //     console.log("Answer sent", incomingCall.callerId, answer);
+  //   } catch (error) {
+  //     console.error("Error during call reception:", error);
+  //   }
 
-    // await peerConnection.current.setRemoteDescription(
-    //   new RTCSessionDescription(incomingCall.offer)
-    // );
-    // const answer = await peerConnection.current.createAnswer();
-    // await peerConnection.current.setLocalDescription(answer);
+  //   // await peerConnection.current.setRemoteDescription(
+  //   //   new RTCSessionDescription(incomingCall.offer)
+  //   // );
+  //   // const answer = await peerConnection.current.createAnswer();
+  //   // await peerConnection.current.setLocalDescription(answer);
 
-    // socket.emit("answer", { target: incomingCall.callerId, answer });
-    // setConnectedUserId(incomingCall.callerId);
-    // setOutGoingAudioCall(true);
-    // console.log("ans send", incomingCall.callerId, answer);
-    // setIncomingCall(null); // কল রিসিভ হয়ে গেলে অফার ক্লিয়ার করুন
-  };
+  //   // socket.emit("answer", { target: incomingCall.callerId, answer });
+  //   // setConnectedUserId(incomingCall.callerId);
+  //   // setOutGoingAudioCall(true);
+  //   // console.log("ans send", incomingCall.callerId, answer);
+  //   // setIncomingCall(null); // কল রিসিভ হয়ে গেলে অফার ক্লিয়ার করুন
+  // };
+
   // উত্তর রিসিভ করা
   socket.on("answer", async ({ sender, answer }) => {
     // await peerConnection.current.setRemoteDescription(

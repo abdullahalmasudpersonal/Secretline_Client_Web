@@ -24,7 +24,6 @@ const style = {
   boxSizing: "border-box",
   border: "none",
 };
-// background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
 
 type TOutGoingAudioCallModalProps = {
   OutGoingAudioCallModalOpen: boolean;
