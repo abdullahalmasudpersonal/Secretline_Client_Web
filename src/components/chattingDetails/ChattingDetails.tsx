@@ -14,8 +14,8 @@ import { useAppSelector } from "../../redux/hooks";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import { useCreateMessageMutation } from "../../redux/features/message/messageApi";
 import socket from "../../utils/Socket";
-// import AudioCall from "./audioCall/AudioCall";
-import AudioCall2 from "./audioCall/AudioCall2";
+import AudioCall from "./audioCall/AudioCall";
+
 
 type ChattingDetailsProps = {
   activeSubMenu: TChatUser;
@@ -104,8 +104,7 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
               className="chatting-details-topber-icon"
               icon={faVideoCamera}
             />
-            <AudioCall2 activeUserId={activeUserId} />
-            {/* <AudioCall activeUserId={activeUserId} /> */}
+            <AudioCall activeUserId={activeUserId} />
             <FontAwesomeIcon
               className="chatting-details-topber-icon"
               icon={faEllipsisVertical}

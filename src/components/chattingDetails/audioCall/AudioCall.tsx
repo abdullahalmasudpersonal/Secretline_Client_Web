@@ -1,210 +1,213 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./AudioCall.css";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import socket from "../../../utils/Socket";
-// import { useAppSelector } from "../../../redux/hooks";
-// import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
-import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
+import OutGoingAudioCallModal from "./audioAllModal/OutGoingAudioCallModal/OutGoingAudioCallModal";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
-interface IncomingCall {
-  userId: string;
-  from: string;
-  offer: RTCSessionDescriptionInit;
-}
 type TAudioCallProps = {
   activeUserId?: string;
 };
 
 const AudioCall = ({ activeUserId }: TAudioCallProps) => {
-  // const currentUser = useAppSelector(selectCurrentUser);
-  const [incomingCall, setIncomingCall] = useState<IncomingCall | null>(null);
-  // const [outgoingCall, setOutgoingCall] = useState();
-  const [incomingCallModal /* setIncomingCallModal */] = useState(true);
-  const [outgoingCallModal, setOutgoingCallModal] = useState(false);
+  const [OutGoingAudioCallModalOpen, setOutGoingAudioCallModalOpen] = useState<boolean>(false);
+  const [outGoingAudioCall, setOutGoingAudioCall] = useState(false);
+  const [connectedUserId /* setConnectedUserId */] = useState<string>("");
 
-  useEffect(() => {
-    socket.on("receivedAudioCallOffer", async ({ userId, from, offer }) => {
-      setIncomingCall({ userId, from, offer });
+  const localAudio = useRef<HTMLAudioElement>(null);
+  const remoteAudio = useRef<HTMLAudioElement>(null);
+  const peerConnection = useRef<RTCPeerConnection>(
+    new RTCPeerConnection({
+      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+    })
+  );
+
+  // কল শুরু করা (Caller)
+  const startCall = async () => {
+    setOutGoingAudioCallModalOpen(true);
+    setOutGoingAudioCall(true);
+
+    // লোকাল অডিও স্ট্রিম
+    const localStream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
     });
+    if (localAudio.current) localAudio.current.srcObject = localStream;
+
+    localStream.getTracks().forEach((track) => {
+      peerConnection.current.addTrack(track, localStream);
+    });
+
+    const offer = await peerConnection.current.createOffer();
+    await peerConnection.current.setLocalDescription(offer);
+
+    socket.emit("offer", { target: activeUserId, offer });
+  };
+
+
+  // কল রিসিভ করা (Receiver)
+  // const receiveCall = async () => {
+  //   if (!incomingCall) return;
+
+  //   // চেক করুন সিগন্যালিং স্টেট
+  //   // if (peerConnection.current.signalingState === "stable") {
+  //   //   console.error("Invalid signaling state");
+  //   //   return;
+  //   // }
+
+  //   // const localStream = await navigator.mediaDevices.getUserMedia({
+  //   //   audio: true,
+  //   // });
+  //   // if (localAudio.current) localAudio.current.srcObject = localStream;
+
+  //   // localStream.getTracks().forEach((track) => {
+  //   //   peerConnection.current.addTrack(track, localStream);
+  //   // });
+
+  //   // //  //// Remote description set করার আগে, নিশ্চিত করুন এটি স্টেবল না
+  //   // if (peerConnection.current.signalingState === "stable") {
+  //   //   console.error("Invalid signaling state");
+  //   //   return;
+  //   // }
+  //   // সিগন্যালিং স্টেট চেক করা
+  //   if (peerConnection.current.signalingState !== "stable") {
+  //     console.log("Waiting for valid signaling state...");
+  //     // কিছু বিলম্বের পর চেষ্টা করা
+  //     setTimeout(async () => {
+  //       try {
+  //         await peerConnection.current.setRemoteDescription(
+  //           new RTCSessionDescription(incomingCall.offer)
+  //         );
+
+  //         const answer = await peerConnection.current.createAnswer();
+  //         await peerConnection.current.setLocalDescription(answer);
+
+  //         socket.emit("answer", { target: incomingCall.callerId, answer });
+  //         setConnectedUserId(incomingCall.callerId);
+  //         setOutGoingAudioCall(true);
+  //         console.log("Answer sent", incomingCall.callerId, answer);
+  //       } catch (error) {
+  //         console.error("Error during call reception:", error);
+  //       }
+  //     }, 1000); // 1 সেকেন্ড পরে ট্রাই
+  //     return;
+  //   }
+
+  //   // রিমোট ডেসক্রিপশন সেট করা
+  //   try {
+  //     await peerConnection.current.setRemoteDescription(
+  //       new RTCSessionDescription(incomingCall.offer)
+  //     );
+
+  //     const answer = await peerConnection.current.createAnswer();
+  //     await peerConnection.current.setLocalDescription(answer);
+
+  //     socket.emit("answer", { target: incomingCall.callerId, answer });
+  //     setConnectedUserId(incomingCall.callerId);
+  //     setOutGoingAudioCall(true);
+  //     console.log("Answer sent", incomingCall.callerId, answer);
+  //   } catch (error) {
+  //     console.error("Error during call reception:", error);
+  //   }
+
+  //   // await peerConnection.current.setRemoteDescription(
+  //   //   new RTCSessionDescription(incomingCall.offer)
+  //   // );
+  //   // const answer = await peerConnection.current.createAnswer();
+  //   // await peerConnection.current.setLocalDescription(answer);
+
+  //   // socket.emit("answer", { target: incomingCall.callerId, answer });
+  //   // setConnectedUserId(incomingCall.callerId);
+  //   // setOutGoingAudioCall(true);
+  //   // console.log("ans send", incomingCall.callerId, answer);
+  //   // setIncomingCall(null); // কল রিসিভ হয়ে গেলে অফার ক্লিয়ার করুন
+  // };
+
+  // ICE Candidate রিসিভ এবং সেট করা
+  // socket.on("ice-candidate", async ({ sender, candidate }) => {
+  //   if (candidate && peerConnection.current.remoteDescription) {
+  //     await peerConnection.current.addIceCandidate(
+  //       new RTCIceCandidate(candidate)
+  //     );
+  //   } else {
+  //     console.log("Remote description not set yet.");
+  //   }
+  //   console.log("ice candidate sender", sender);
+  // });
+  // একটি কিউ তৈরি করুন যেখানে ICE Candidate জমা রাখা হবে।
+  const pendingCandidates = useRef<RTCIceCandidateInit[]>([]);
+
+  // ICE Candidate রিসিভ এবং সেট করা
+  socket.on("ice-candidate", async ({ sender, candidate }) => {
+    if (candidate) {
+      if (peerConnection.current.remoteDescription) {
+        // Remote Description সেট করা থাকলে Candidate যোগ করুন
+        try {
+          await peerConnection.current.addIceCandidate(
+            new RTCIceCandidate(candidate)
+          );
+          console.log("ICE Candidate added successfully:", candidate);
+        } catch (error) {
+          console.error("Error adding ICE Candidate:", error);
+        }
+      } else {
+        // Remote Description সেট না থাকলে Candidate কিউতে জমা রাখুন
+        pendingCandidates.current.push(candidate);
+        console.log("Remote description not set yet. Candidate queued.");
+      }
+    }
+    console.log("ICE candidate sender", sender);
   });
 
-  // useEffect(() => {
-  //   socket.on("receivedAudioCallAnswer", async ({ answer }) => {
-  //     outgoingCall( answer);
-  //   });
-  // });
-
-  const sendAudioCall = async () => {
-    setOutgoingCallModal(true);
-    const peerConnection = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-    });
-    const localStream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-    });
-    localStream.getTracks().forEach((track) => {
-      peerConnection.addTrack(track, localStream);
-    });
-
-    // peerConnection.onicecandidate = (event) => {
-    //   if (event.candidate) {
-    //     socket.emit("sendIceCandidate", {
-    //       target: activeUserId,
-    //       candidate: event.candidate,
-    //     });
-    //   }
-    // };
-
-    // peerConnection.ontrack = (event) => {
-    //   console.log("Remote stream received");
-    //   const remoteStream = event.streams[0];
-    //   const audioElement = document.getElementById(
-    //     "remoteAudio"
-    //   ) as HTMLAudioElement;
-    //   if (audioElement) {
-    //     audioElement.srcObject = remoteStream;
-    //   }
-    // };
-
-    const offer = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offer);
-
-    socket.emit("sendAudioCallOffer", {
-      target: activeUserId,
-      offer,
-    });
-
-    console.log("Offer sent to receiver:", offer);
-  };
-
-  const acceptAudioCall = async () => {
-    if (!incomingCall || !socket) return;
-
-    const peerConnection = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-    });
-    const localStream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-    });
-    localStream.getTracks().forEach((track) => {
-      peerConnection.addTrack(track, localStream);
-    });
-
-    peerConnection.onicecandidate = (event) => {
-      if (event.candidate) {
-        socket.emit("sendIceCandidate", {
-          target: incomingCall.from,
-          candidate: event.candidate,
-        });
+  // Remote Description সেট করার পর জমা রাখা আইস ক্যান্ডিডেট অ্যাড করুন
+  peerConnection.current.oniceconnectionstatechange = () => {
+    if (peerConnection.current.remoteDescription) {
+      // কিউতে থাকা সমস্ত Candidate যুক্ত করা
+      while (pendingCandidates.current.length > 0) {
+        const candidate = pendingCandidates.current.shift();
+        if (candidate) {
+          peerConnection.current
+            .addIceCandidate(new RTCIceCandidate(candidate))
+            .then(() => console.log("Queued ICE Candidate added successfully."))
+            .catch((error) =>
+              console.error("Error adding queued ICE Candidate:", error)
+            );
+        }
       }
-    };
-
-    peerConnection.ontrack = (event) => {
-      const remoteStream = event.streams[0];
-      const audioElement = document.getElementById(
-        "remoteAudio"
-      ) as HTMLAudioElement;
-      if (audioElement) {
-        audioElement.srcObject = remoteStream;
-      }
-    };
-
-    await peerConnection.setRemoteDescription(
-      new RTCSessionDescription(incomingCall.offer)
-    );
-
-    const answer = await peerConnection.createAnswer();
-    await peerConnection.setLocalDescription(answer);
-
-    socket.emit("sendAudioCallAnswer", {
-      target: incomingCall.from,
-      answer: peerConnection.localDescription,
-    });
-
-    console.log("Answer created and sent.");
+    }
   };
 
-  // কল প্রত্যাখ্যান করার ফাংশন
-  const rejectAudioCall = () => {
-    console.log("Call rejected.");
-    setIncomingCall(null);
+  // ICE Candidate পাঠানো
+  peerConnection.current.onicecandidate = ({ candidate }) => {
+    if (candidate) {
+      socket.emit("ice-candidate", { target: connectedUserId, candidate });
+    }
   };
 
-  const cancelAudioCall = () => {
-    setOutgoingCallModal(false);
+  // রিমোট স্ট্রিম প্লে করা
+  peerConnection.current.ontrack = (event) => {
+    if (remoteAudio.current) {
+      remoteAudio.current.srcObject = event.streams[0];
+    }
   };
 
   return (
     <>
-      {/* ----------------- Incomming Call Modal -------------------- */}
-      {incomingCall && (
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={incomingCallModal}
-          closeAfterTransition
-          slots={{ backdrop: Backdrop }}
-          slotProps={{
-            backdrop: {
-              timeout: 500,
-            },
-          }}
-        >
-          <Fade in={incomingCallModal}>
-            <Box sx={style}>
-              <p>Incoming call from user: {incomingCall.userId}</p>
-              <button onClick={acceptAudioCall}>Accept</button>
-              <button onClick={rejectAudioCall}>Reject</button>
-            </Box>
-          </Fade>
-        </Modal>
-      )}
+      {/* লোকাল এবং রিমোট অডিও ট্যাগ */}
+      <audio ref={localAudio} autoPlay muted /> {/* লোকাল অডিও */}
+      <audio ref={remoteAudio} autoPlay /> {/* রিমোট অডিও */}
       <>
-        {/* ----------------- Outgoing Call Modal -------------------- */}
-        {/* {outgoingCall && ( */}
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={outgoingCallModal}
-          closeAfterTransition
-          slots={{ backdrop: Backdrop }}
-          slotProps={{
-            backdrop: {
-              timeout: 500,
-            },
-          }}
-        >
-          <Fade in={outgoingCallModal}>
-            <Box sx={style}>
-              <p>Outgoing call for user: {activeUserId}</p>
-              {/* <button onClick={acceptAudioCall}>Accept</button>
-                <button onClick={rejectAudioCall}>Reject</button> */}
-              <button onClick={cancelAudioCall}>Cancel</button>
-            </Box>
-          </Fade>
-        </Modal>
-        {/* )} */}
+        {/* ----------------------- Outgoing Audio Call Modal ---------------------- */}
+        {outGoingAudioCall && (
+          <OutGoingAudioCallModal
+            activeUserId={activeUserId || ""}
+            OutGoingAudioCallModalOpen={OutGoingAudioCallModalOpen}
+            setOutGoingAudioCallModalOpen={setOutGoingAudioCallModalOpen}
+          />
+        )}
       </>
       <FontAwesomeIcon
         className="chatting-details-topber-icon"
         icon={faPhone}
-        onClick={sendAudioCall}
+        onClick={startCall}
       />
     </>
   );

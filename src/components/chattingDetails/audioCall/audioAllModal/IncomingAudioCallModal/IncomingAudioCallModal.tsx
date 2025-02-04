@@ -2,6 +2,8 @@ import { faPhone, faPhoneFlip } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import "./IncomingAudioCallModal.css";
+import { Dispatch, SetStateAction } from "react";
+import { useGetSingleUserQuery } from "../../../../../redux/features/user/userApi";
 
 const style = {
   position: "absolute",
@@ -28,11 +30,18 @@ interface IncomingCall {
 type AudioCallModalProps = {
   incomingCallModal: boolean;
   incomingCall: IncomingCall;
+  setIncomingCallModal: Dispatch<SetStateAction<boolean>>;
 };
 const IncomingAudioCallModal = ({
   incomingCallModal,
-}: // incomingCall,
-AudioCallModalProps) => {
+  incomingCall,
+  setIncomingCallModal
+}: AudioCallModalProps) => {
+  const userId = incomingCall?.userId
+  const { data } = useGetSingleUserQuery(userId);
+
+  const { name } = data?.data || {};;
+
   return (
     <>
       <Modal
@@ -74,7 +83,7 @@ AudioCallModalProps) => {
                     fontSize: "18px",
                   }}
                 >
-                  Abdullah
+                  {name}
                 </p>
                 <svg
                   className="incommingAudioCallIcon"
@@ -96,7 +105,7 @@ AudioCallModalProps) => {
                 <FontAwesomeIcon icon={faPhone} />
               </button>
               <button className="rejectAudioCallBtn">
-                <FontAwesomeIcon icon={faPhoneFlip} />
+                <FontAwesomeIcon icon={faPhoneFlip} onClick={() => setIncomingCallModal(false)} />
               </button>
             </div>
           </Box>

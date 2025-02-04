@@ -14,7 +14,6 @@ const Home = () => {
     null
   );
 
-  // console.log(data, "data");
 
   const handleMainMenuClick = (menu: string) => {
     if (menu !== activeMenu) {

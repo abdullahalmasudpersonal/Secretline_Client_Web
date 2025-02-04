@@ -8,6 +8,8 @@ import {
 import "./OutGoingAudioCallModal.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
+import { Dispatch, SetStateAction } from "react";
+import { useGetSingleUserQuery } from "../../../../../redux/features/user/userApi";
 
 const style = {
   position: "absolute",
@@ -26,12 +28,17 @@ const style = {
 };
 
 type TOutGoingAudioCallModalProps = {
+  activeUserId: string,
   OutGoingAudioCallModalOpen: boolean;
+  setOutGoingAudioCallModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-const OutGoingAudioCallModal = ({
-  OutGoingAudioCallModalOpen,
+const OutGoingAudioCallModal = ({ activeUserId,
+  OutGoingAudioCallModalOpen, setOutGoingAudioCallModalOpen
 }: TOutGoingAudioCallModalProps) => {
+  const { data } = useGetSingleUserQuery(activeUserId);
+  const { name } = data?.data || {};
+
   return (
     <>
       {" "}
@@ -51,7 +58,7 @@ const OutGoingAudioCallModal = ({
           <Box sx={style}>
             <div className="outGoingAudioCallInfoDiv">
               <p style={{ margin: "0", fontSize: "18px", marginTop: "15px" }}>
-                Abdullah
+                {name}
               </p>
               <svg
                 className="outGoingAudioCallUserIcon"
@@ -88,7 +95,7 @@ const OutGoingAudioCallModal = ({
             </div>
             <div className="outGoingaudioCallBtnDiv">
               <button className="rejectAudioCallBtn">
-                <FontAwesomeIcon icon={faPhoneFlip} />
+                <FontAwesomeIcon onClick={() => setOutGoingAudioCallModalOpen(false)} icon={faPhoneFlip} />
               </button>
             </div>
           </Box>
