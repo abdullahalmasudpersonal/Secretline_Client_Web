@@ -6,6 +6,7 @@ import MainMenu from "../../components/mainManu/MainManu";
 import DefaultContent from "../../components/defaultContent/DefaultContent";
 import SideberChat from "../../components/sideber/sideberChat/SideberChat";
 import Profile from "../components/profile/Profile";
+import Setting from "../components/setting/Setting";
 
 const Home = () => {
   const [activeMenu, setActiveMenu] = useState("chat");
@@ -54,7 +55,7 @@ const Home = () => {
         return (
           <div className="subMenuItem">
             <div onClick={() => handleSubMenuClick2("settings")}>
-              Settings Submenu
+              <Setting />
             </div>
           </div>
         );

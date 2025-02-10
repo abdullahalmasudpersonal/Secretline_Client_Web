@@ -2,8 +2,10 @@ import { faPhone, faPhoneFlip } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import "./IncomingAudioCallModal.css";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useGetSingleUserQuery } from "../../../../../redux/features/user/userApi";
+import socket from "../../../../../utils/Socket";
+import Peer, { Instance } from "simple-peer";
 
 const style = {
   position: "absolute",
@@ -39,11 +41,67 @@ const IncomingAudioCallModal = ({
 }: AudioCallModalProps) => {
   const userId = incomingCall?.userId
   const { data } = useGetSingleUserQuery(userId);
+  const { name } = data?.data || {};
 
-  const { name } = data?.data || {};;
+  // ///////////////////////////////////////
+
+  const userAudio = useRef<HTMLAudioElement | null>(null);
+  const connectionRef = useRef<Instance | null>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [callerSignal, setCallerSignal] = useState<any>(null);
+  const [callerId, setCallerId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // মাইক্রোফোন অ্যাক্সেস করুন
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((currentStream) => {
+        setStream(currentStream);
+      })
+      .catch((error) => {
+        console.error('Error accessing microphone:', error);
+      });
+
+    // কলের নোটিফিকেশন পেলে
+    socket.on('callUser', (data) => {
+      setCallerSignal(data.signal); // কলার সিগনাল সেট করুন
+      setCallerId(data.from); // কলার আইডি সেট করুন
+    });
+  }, []);
+
+  const acceptCall = () => {
+    if (!stream || !callerSignal) return;
+
+    // WebRTC পিয়ার তৈরি করুন
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      stream: stream,
+    });
+
+    // সিগনাল তৈরি করুন এবং কলারকে পাঠান
+    peer.on('signal', (data) => {
+      socket.emit('acceptCall', {
+        signal: data,
+        to: callerId, // কলার আইডি
+      });
+    });
+
+    peer.on('stream', (remoteStream) => {
+      console.log('Received remote stream:', remoteStream); // রিমোট স্ট্রিম লগ করুন
+      if (userAudio.current) {
+        userAudio.current.srcObject = remoteStream;
+      }
+    });
+
+    // কলার থেকে সিগনাল পেলে কানেকশন সম্পূর্ণ করুন
+    peer.signal(callerSignal);
+    connectionRef.current = peer;
+  };
+
 
   return (
     <>
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -68,6 +126,14 @@ const IncomingAudioCallModal = ({
             >
               InCommingCall...
             </p> */}
+            <>
+              {callerSignal && (
+                <div>
+                  <p>{callerId} is calling...</p>
+                  <button onClick={acceptCall}>Answer Call</button>
+                </div>
+              )}
+            </>
             <div className="incommingAudioCallInfoDiv">
               <div
                 style={{

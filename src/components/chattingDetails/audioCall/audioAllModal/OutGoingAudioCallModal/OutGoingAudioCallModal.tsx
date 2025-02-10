@@ -8,7 +8,7 @@ import {
 import "./OutGoingAudioCallModal.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, } from "react";
 import { useGetSingleUserQuery } from "../../../../../redux/features/user/userApi";
 
 const style = {
@@ -36,12 +36,16 @@ type TOutGoingAudioCallModalProps = {
 const OutGoingAudioCallModal = ({ activeUserId,
   OutGoingAudioCallModalOpen, setOutGoingAudioCallModalOpen
 }: TOutGoingAudioCallModalProps) => {
-  const { data } = useGetSingleUserQuery(activeUserId);
-  const { name } = data?.data || {};
+  const { data } = useGetSingleUserQuery(activeUserId, {
+    pollingInterval: 1000,
+    skipPollingIfUnfocused: true,
+  });
+  const { name, user } = data?.data || {};
+
 
   return (
     <>
-      {" "}
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -72,7 +76,7 @@ const OutGoingAudioCallModal = ({ activeUserId,
                 />
               </svg>
               <p style={{ margin: "0", marginBottom: "5px" }}>
-                <small>CALLING...</small>
+                <small>{user?.isOnline ? "Ringing..." : "CALLING..."}</small>
               </p>
             </div>
             <div className="outGoingAudioCallDetailsBtnDiv">

@@ -4,8 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 
 const DefaultContent = () => {
+
+
   return (
     <div className="defaultContent">
+
       <div className="defaultContentInfo">
         <div>
           <img src={defaultImage} alt="" width={350} />

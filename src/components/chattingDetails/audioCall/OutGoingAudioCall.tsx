@@ -1,14 +1,19 @@
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import socket from "../../../utils/Socket";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import OutGoingAudioCallModal from "./audioAllModal/OutGoingAudioCallModal/OutGoingAudioCallModal";
+import { useAppSelector } from "../../../redux/hooks";
+import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
+import Peer, { Instance } from "simple-peer";
+
 
 type TAudioCallProps = {
   activeUserId?: string;
 };
 
-const AudioCall = ({ activeUserId }: TAudioCallProps) => {
+const OutGoingAudioCall = ({ activeUserId }: TAudioCallProps) => {
+  const currentUser = useAppSelector(selectCurrentUser);
   const [OutGoingAudioCallModalOpen, setOutGoingAudioCallModalOpen] = useState<boolean>(false);
   const [outGoingAudioCall, setOutGoingAudioCall] = useState(false);
   const [connectedUserId /* setConnectedUserId */] = useState<string>("");
@@ -189,11 +194,64 @@ const AudioCall = ({ activeUserId }: TAudioCallProps) => {
     }
   };
 
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // const myAudio = useRef<HTMLAudioElement | null>(null);
+  const userAudio = useRef<HTMLAudioElement | null>(null);
+  const connectionRef = useRef<Instance | null>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
+
+  useEffect(() => {
+    // মাইক্রোফোন অ্যাক্সেস করুন
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((currentStream) => {
+        setStream(currentStream);
+      })
+      .catch((error) => {
+        console.error('Error accessing microphone:', error);
+      });
+  }, []);
+
+  const callUser = async () => {
+    if (!stream) return;
+
+    // WebRTC পিয়ার তৈরি করুন
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream: stream,
+    });
+
+    // সিগনাল তৈরি করুন এবং রিসিভারকে পাঠান
+    peer.on('signal', (data) => {
+      socket.emit('callUser', {
+        userToCall: activeUserId, // যাকে কল করছেন তার আইডি
+        signalData: data, // WebRTC সিগনাল
+        from: currentUser?.userId, // আপনার আইডি
+      });
+    });
+
+    peer.on('stream', (remoteStream) => {
+      console.log('Received remote stream:', remoteStream); // রিমোট স্ট্রিম লগ করুন
+      if (userAudio.current) {
+        userAudio.current.srcObject = remoteStream;
+      }
+    });
+
+    // রিসিভার থেকে সিগনাল পেলে কানেকশন সম্পূর্ণ করুন
+    socket.on('callAccepted', (signal) => {
+      console.log('singnal', signal);
+      peer.signal(signal);
+    });
+
+    connectionRef.current = peer;
+  };
+
+
   return (
     <>
-      {/* লোকাল এবং রিমোট অডিও ট্যাগ */}
-      <audio ref={localAudio} autoPlay muted /> {/* লোকাল অডিও */}
-      <audio ref={remoteAudio} autoPlay /> {/* রিমোট অডিও */}
+      <audio ref={localAudio} autoPlay muted />
+      <audio ref={remoteAudio} autoPlay />
       <>
         {/* ----------------------- Outgoing Audio Call Modal ---------------------- */}
         {outGoingAudioCall && (
@@ -204,6 +262,12 @@ const AudioCall = ({ activeUserId }: TAudioCallProps) => {
           />
         )}
       </>
+      <>
+        {/* কল শুরু করার বাটন */}
+        <button onClick={callUser}>
+          <FontAwesomeIcon icon={faPhone} />
+        </button>
+      </>
       <FontAwesomeIcon
         className="chatting-details-topber-icon"
         icon={faPhone}
@@ -213,4 +277,4 @@ const AudioCall = ({ activeUserId }: TAudioCallProps) => {
   );
 };
 
-export default AudioCall;
+export default OutGoingAudioCall;

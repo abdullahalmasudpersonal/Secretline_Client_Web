@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   define: {
     "process.env": {},
+    global: 'window', // `global` কে `window` দিয়ে প্রতিস্থাপন করুন
   },
   server: {
     host: true,

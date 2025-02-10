@@ -14,8 +14,9 @@ import { useAppSelector } from "../../redux/hooks";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import { useCreateMessageMutation } from "../../redux/features/message/messageApi";
 import socket from "../../utils/Socket";
-import AudioCall from "./audioCall/AudioCall";
-
+import OutGoingAudioCall from "./audioCall/OutGoingAudioCall";
+import { useGetSingleUserQuery } from "../../redux/features/user/userApi";
+import defaultProfileImg from '../../assets/porfile/profileImg.webp'
 
 type ChattingDetailsProps = {
   activeSubMenu: TChatUser;
@@ -33,6 +34,11 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
   const [messages, setMessages] = useState<
     { content: string; senderId: string }[]
   >([]);
+  const { data: activeUserData } = useGetSingleUserQuery(activeUserId, {
+    pollingInterval: 1000,
+    skipPollingIfUnfocused: true,
+  });
+  const { profileImg, user: activeUser } = activeUserData?.data || {};
 
   // setMessages  সার্ভার থেকে মেসেজ লোড করুন
   useEffect(() => {
@@ -88,15 +94,22 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
     setHasContent(false);
   };
 
+
+
   return (
     <>
       <div className="chatting-details">
         <div className="chatting-details-topberPart">
           <div className="chatting-details-profile-img">
-            <img
+            {activeUser?.isOnline ? <div style={{ width: "11px", height: "11px", borderRadius: "50%", backgroundColor: 'rgb(34, 153, 84)', position: 'absolute', marginTop: "28px", marginLeft: "30px" }}></div> : ""}
+            {profileImg ? <img
               width="50px"
-              src="https://thumbs.dreamstime.com/b/portrait-young-handsome-happy-man-wearing-glasses-casual-smart-blue-clothing-yellow-color-background-square-composition-200740125.jpg"
-            />
+              src={profileImg}
+            /> : <img
+              width="50px"
+              src={defaultProfileImg}
+            />}
+
             <p style={{ margin: 0, fontWeight: 500 }}>{name}</p>
           </div>
           <div>
@@ -104,7 +117,7 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
               className="chatting-details-topber-icon"
               icon={faVideoCamera}
             />
-            <AudioCall activeUserId={activeUserId} />
+            <OutGoingAudioCall activeUserId={activeUserId} />
             <FontAwesomeIcon
               className="chatting-details-topber-icon"
               icon={faEllipsisVertical}

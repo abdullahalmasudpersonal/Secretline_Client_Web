@@ -15,6 +15,17 @@
     rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
     rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
 }
+.subManuBigProfileIcon{
+  width: 200px;
+  height: 200px;
+  background-color: rgb(148, 148, 148);
+  padding: 12px 0px 0px 0px;
+  border-radius: 50%;
+  border: 2px solid rgb(194, 194, 194);
+}
+.profileNameDiv{
+  margin-bottom: 30px;
+}
 .profileNameDiv input {
   width: 100%;
 }

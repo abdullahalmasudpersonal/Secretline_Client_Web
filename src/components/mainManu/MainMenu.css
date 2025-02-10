@@ -30,3 +30,19 @@
 .mainManuIcon.active {
   background-color: rgb(85, 85, 85);
 }
+.userProfileIconDiv{
+  margin: auto;
+  padding: 5px 5px 1px 5px;
+  border-radius: 50%;
+}
+.mainManuProfileIcon{
+  height: 29px;
+  width: 29px;
+  border-radius: 50%;
+  background-color: aliceblue;
+  cursor: pointer;
+  padding: 2px;
+}
+.userProfileIconDiv.active {
+  background-color: rgb(85, 85, 85);
+}
