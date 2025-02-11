@@ -1,11 +1,10 @@
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import socket from "../../../utils/Socket";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import OutGoingAudioCallModal from "./audioAllModal/OutGoingAudioCallModal/OutGoingAudioCallModal";
-import { useAppSelector } from "../../../redux/hooks";
-import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
-import Peer, { Instance } from "simple-peer";
+// import { useAppSelector } from "../../../redux/hooks";
+// import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
 
 
 type TAudioCallProps = {
@@ -13,39 +12,39 @@ type TAudioCallProps = {
 };
 
 const OutGoingAudioCall = ({ activeUserId }: TAudioCallProps) => {
-  const currentUser = useAppSelector(selectCurrentUser);
+  // const currentUser = useAppSelector(selectCurrentUser);
   const [OutGoingAudioCallModalOpen, setOutGoingAudioCallModalOpen] = useState<boolean>(false);
   const [outGoingAudioCall, setOutGoingAudioCall] = useState(false);
   const [connectedUserId /* setConnectedUserId */] = useState<string>("");
 
   const localAudio = useRef<HTMLAudioElement>(null);
   const remoteAudio = useRef<HTMLAudioElement>(null);
-  const peerConnection = useRef<RTCPeerConnection>(
-    new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-    })
-  );
+  // const peerConnection = useRef<RTCPeerConnection>(
+  //   new RTCPeerConnection({
+  //     // iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+  //   })
+  // );
 
   // কল শুরু করা (Caller)
-  const startCall = async () => {
-    setOutGoingAudioCallModalOpen(true);
-    setOutGoingAudioCall(true);
+  // const startCall = async () => {
+  //   setOutGoingAudioCallModalOpen(true);
+  //   setOutGoingAudioCall(true);
 
-    // লোকাল অডিও স্ট্রিম
-    const localStream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-    });
-    if (localAudio.current) localAudio.current.srcObject = localStream;
+  //   // লোকাল অডিও স্ট্রিম
+  //   const localStream = await navigator.mediaDevices.getUserMedia({
+  //     audio: true,
+  //   });
+  //   if (localAudio.current) localAudio.current.srcObject = localStream;
 
-    localStream.getTracks().forEach((track) => {
-      peerConnection.current.addTrack(track, localStream);
-    });
+  //   localStream.getTracks().forEach((track) => {
+  //     peerConnection.current.addTrack(track, localStream);
+  //   });
 
-    const offer = await peerConnection.current.createOffer();
-    await peerConnection.current.setLocalDescription(offer);
+  //   const offer = await peerConnection.current.createOffer();
+  //   await peerConnection.current.setLocalDescription(offer);
 
-    socket.emit("offer", { target: activeUserId, offer });
-  };
+  //   socket.emit("offer", { target: activeUserId, offer });
+  // };
 
 
   // কল রিসিভ করা (Receiver)
@@ -163,89 +162,38 @@ const OutGoingAudioCall = ({ activeUserId }: TAudioCallProps) => {
   });
 
   // Remote Description সেট করার পর জমা রাখা আইস ক্যান্ডিডেট অ্যাড করুন
-  peerConnection.current.oniceconnectionstatechange = () => {
-    if (peerConnection.current.remoteDescription) {
-      // কিউতে থাকা সমস্ত Candidate যুক্ত করা
-      while (pendingCandidates.current.length > 0) {
-        const candidate = pendingCandidates.current.shift();
-        if (candidate) {
-          peerConnection.current
-            .addIceCandidate(new RTCIceCandidate(candidate))
-            .then(() => console.log("Queued ICE Candidate added successfully."))
-            .catch((error) =>
-              console.error("Error adding queued ICE Candidate:", error)
-            );
-        }
-      }
-    }
-  };
+  // peerConnection.current.oniceconnectionstatechange = () => {
+  //   if (peerConnection.current.remoteDescription) {
+  //     // কিউতে থাকা সমস্ত Candidate যুক্ত করা
+  //     while (pendingCandidates.current.length > 0) {
+  //       const candidate = pendingCandidates.current.shift();
+  //       if (candidate) {
+  //         peerConnection.current
+  //           .addIceCandidate(new RTCIceCandidate(candidate))
+  //           .then(() => console.log("Queued ICE Candidate added successfully."))
+  //           .catch((error) =>
+  //             console.error("Error adding queued ICE Candidate:", error)
+  //           );
+  //       }
+  //     }
+  //   }
+  // };
 
   // ICE Candidate পাঠানো
-  peerConnection.current.onicecandidate = ({ candidate }) => {
-    if (candidate) {
-      socket.emit("ice-candidate", { target: connectedUserId, candidate });
-    }
-  };
+  // peerConnection.current.onicecandidate = ({ candidate }) => {
+  //   if (candidate) {
+  //     socket.emit("ice-candidate", { target: connectedUserId, candidate });
+  //   }
+  // };
 
   // রিমোট স্ট্রিম প্লে করা
-  peerConnection.current.ontrack = (event) => {
-    if (remoteAudio.current) {
-      remoteAudio.current.srcObject = event.streams[0];
-    }
-  };
+  // peerConnection.current.ontrack = (event) => {
+  //   if (remoteAudio.current) {
+  //     remoteAudio.current.srcObject = event.streams[0];
+  //   }
+  // };
 
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // const myAudio = useRef<HTMLAudioElement | null>(null);
-  const userAudio = useRef<HTMLAudioElement | null>(null);
-  const connectionRef = useRef<Instance | null>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-
-  useEffect(() => {
-    // মাইক্রোফোন অ্যাক্সেস করুন
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then((currentStream) => {
-        setStream(currentStream);
-      })
-      .catch((error) => {
-        console.error('Error accessing microphone:', error);
-      });
-  }, []);
-
-  const callUser = async () => {
-    if (!stream) return;
-
-    // WebRTC পিয়ার তৈরি করুন
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: stream,
-    });
-
-    // সিগনাল তৈরি করুন এবং রিসিভারকে পাঠান
-    peer.on('signal', (data) => {
-      socket.emit('callUser', {
-        userToCall: activeUserId, // যাকে কল করছেন তার আইডি
-        signalData: data, // WebRTC সিগনাল
-        from: currentUser?.userId, // আপনার আইডি
-      });
-    });
-
-    peer.on('stream', (remoteStream) => {
-      console.log('Received remote stream:', remoteStream); // রিমোট স্ট্রিম লগ করুন
-      if (userAudio.current) {
-        userAudio.current.srcObject = remoteStream;
-      }
-    });
-
-    // রিসিভার থেকে সিগনাল পেলে কানেকশন সম্পূর্ণ করুন
-    socket.on('callAccepted', (signal) => {
-      console.log('singnal', signal);
-      peer.signal(signal);
-    });
-
-    connectionRef.current = peer;
-  };
 
 
   return (
@@ -262,16 +210,10 @@ const OutGoingAudioCall = ({ activeUserId }: TAudioCallProps) => {
           />
         )}
       </>
-      <>
-        {/* কল শুরু করার বাটন */}
-        <button onClick={callUser}>
-          <FontAwesomeIcon icon={faPhone} />
-        </button>
-      </>
       <FontAwesomeIcon
         className="chatting-details-topber-icon"
         icon={faPhone}
-        onClick={startCall}
+      // onClick={startCall}
       />
     </>
   );

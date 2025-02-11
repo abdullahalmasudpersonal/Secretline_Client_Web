@@ -1,12 +1,18 @@
 .profileDiv {
+  height: 100%;
   padding: 20px;
+  scrollbar-width: thin;
+  overflow-y: auto;
+  scrollbar-color: #999999 #a7a7a700;
 }
+
 .profileImgDiv {
   height: 270px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .profileImgDiv img {
   height: 200px;
   width: 200px;
@@ -15,7 +21,8 @@
     rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
     rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
 }
-.subManuBigProfileIcon{
+
+.subManuBigProfileIcon {
   width: 200px;
   height: 200px;
   background-color: rgb(148, 148, 148);
@@ -23,9 +30,11 @@
   border-radius: 50%;
   border: 2px solid rgb(194, 194, 194);
 }
-.profileNameDiv{
+
+.profileNameDiv {
   margin-bottom: 30px;
 }
+
 .profileNameDiv input {
   width: 100%;
 }

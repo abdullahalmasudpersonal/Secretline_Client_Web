@@ -1,3 +1,17 @@
-.settingDiv{
-    padding: 20px;
+.settingDiv {}
+
+.itemDiv {
+    height: 55px;
+    display: flex;
+    cursor: pointer;
+    color: white;
+    transition: ease-in-out .3s;
+}
+
+.itemDiv p {
+    font-size: large;
+}
+
+.itemDiv:hover {
+    background-color: rgb(81, 81, 81);
 }

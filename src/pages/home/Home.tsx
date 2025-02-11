@@ -54,7 +54,7 @@ const Home = () => {
       case "settings":
         return (
           <div className="subMenuItem">
-            <div onClick={() => handleSubMenuClick2("settings")}>
+            <div>
               <Setting />
             </div>
           </div>
@@ -92,12 +92,12 @@ const Home = () => {
             <div>Users Submenu 2 Details</div>
           </div>
         );
-      case "settings":
-        return (
-          <div>
-            <div>Settings Details</div>
-          </div>
-        );
+      // case "settings":
+      //   return (
+      //     <div>
+      //       <div>Settings Details</div>
+      //     </div>
+      //   );
       default:
         return null;
     }

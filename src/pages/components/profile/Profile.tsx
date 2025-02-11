@@ -5,6 +5,8 @@ import "./Profile.css";
 const Profile = () => {
   const { data } = useGetProfileQuery({});
   const profileData = data?.data || "";
+  console.log(profileData);
+
   return (
     <div className="profileDiv">
       <p style={{ margin: "0", fontSize: "22px", fontWeight: "600" }}>
@@ -52,6 +54,33 @@ const Profile = () => {
           }}
         >
           {profileData?.email}
+        </p>
+      </div>
+      <div className="profileNameDiv">
+        <label>Your Phone</label>
+        <p
+          style={{
+            margin: "0",
+            marginTop: "7px",
+            fontSize: "18px",
+            fontWeight: "500",
+          }}
+        >
+          {profileData?.user?.phone}
+        </p>
+      </div>
+
+      <div className="profileNameDiv">
+        <label>About</label>
+        <p
+          style={{
+            margin: "0",
+            marginTop: "7px",
+            fontSize: "18px",
+            fontWeight: "500",
+          }}
+        >
+          {profileData?.about}
         </p>
       </div>
     </div>

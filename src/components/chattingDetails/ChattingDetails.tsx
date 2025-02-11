@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./chattingDetails.css";
 import {
   faEllipsisVertical,
-  faPlus,
   faVideoCamera,
 } from "@fortawesome/free-solid-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons/faPaperPlane";
@@ -17,6 +16,8 @@ import socket from "../../utils/Socket";
 import OutGoingAudioCall from "./audioCall/OutGoingAudioCall";
 import { useGetSingleUserQuery } from "../../redux/features/user/userApi";
 import defaultProfileImg from '../../assets/porfile/profileImg.webp'
+import SendFiles from "./sendFiles/SendFiles";
+
 
 type ChattingDetailsProps = {
   activeSubMenu: TChatUser;
@@ -124,6 +125,7 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
             />
           </div>
         </div>
+
         <div className="chatting-details-messagesPart" ref={chatContainerRef}>
           <div className="chatting-details-message-div">
             {messages.map((msg, index: number) => (
@@ -141,12 +143,10 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
             ))}
           </div>
         </div>
+
         <div className="chatting-details-bottomberPart">
           <div className="chatting-details-add-item">
-            <FontAwesomeIcon
-              className="chatting-details-add-item-icon"
-              icon={faPlus}
-            />
+            <SendFiles />
           </div>
           <div className="chatting-details-text">
             <div
