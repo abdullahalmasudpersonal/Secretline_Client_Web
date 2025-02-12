@@ -6,11 +6,15 @@
   scrollbar-color: #999999 #a7a7a700;
 }
 
+.sdf {
+  color: rgb(65, 70, 81);
+}
+
 .profileImgDiv {
-  height: 270px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 50px;
 }
 
 .profileImgDiv img {
