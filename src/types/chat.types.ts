@@ -10,6 +10,7 @@ export type TChatUser = {
   email: string;
   name: string;
   phone: string;
+  profileImg: string;
   lastMessage: TChatUserLastMessage;
   updatedAt: string;
 };

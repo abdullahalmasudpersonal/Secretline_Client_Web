@@ -4,6 +4,7 @@ export type TContactList = {
   email: string;
   phone: string;
   about: string;
+  profileImg: string;
 };
 export type TContact = {
   _id: string;

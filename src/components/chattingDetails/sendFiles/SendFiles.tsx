@@ -3,8 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Menu, MenuItem, } from "@mui/material";
 import { useState } from "react";
 
+type SendFilesProps = {
+    onFileSelect: (file: File) => void;
+};
 
-const SendFiles = () => {
+const SendFiles = ({ onFileSelect }: SendFilesProps) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const [file, setFile] = useState<File | null>(null);
@@ -19,13 +22,15 @@ const SendFiles = () => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             setFile(event.target.files[0]);
+            if (file) {
+                onFileSelect(file);
+            }
         }
         setAnchorEl(null);
     };
 
     return (
         <>
-
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}

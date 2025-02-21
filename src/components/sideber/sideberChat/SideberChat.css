@@ -4,19 +4,23 @@
   display: flex;
   flex-direction: column;
 }
+
 .sideberChatTopPart {
   padding: 13px;
   margin-bottom: 10px;
   padding-top: 20px;
 }
-.sideberChatTopPart > div {
+
+.sideberChatTopPart>div {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .chatSearchBer {
   position: relative;
 }
+
 .chatSearchBer input {
   margin-top: 22px;
   width: 100%;
@@ -28,6 +32,7 @@
   padding: 10px 30px 10px 54px;
   color: rgb(224, 224, 224);
 }
+
 .chatSearchIcon {
   position: absolute;
   bottom: 9px;
@@ -35,9 +40,11 @@
   font-size: 13px;
   transition: transform 0.5s ease;
 }
+
 .chatSearchIcon.rotated {
   transform: rotate(90deg);
 }
+
 .chatCloseIcon {
   position: absolute;
   right: 6px;
@@ -56,15 +63,18 @@
   color: white;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
 .chattingUser:hover {
   background-color: rgba(87, 87, 87, 0.418);
   cursor: pointer;
 }
+
 .chattingUser.activeChatUser {
   background-color: rgba(85, 85, 85, 0.678);
   border-left: 4px solid #929292;
   padding-left: 6px;
 }
+
 .chattingUserIcon {
   width: 48px;
   height: 48px;
@@ -72,6 +82,7 @@
   padding: 12px 0px 0px 0px;
   background-color: #777777;
 }
+
 .chattingUserInfo {
   height: 100%;
   width: 100%;
@@ -79,9 +90,11 @@
   display: flex;
   align-items: center;
 }
+
 .chattingUserInfo p {
   margin: 0;
 }
+
 .sideberChatButtomPart {
   position: absolute;
   bottom: 0;

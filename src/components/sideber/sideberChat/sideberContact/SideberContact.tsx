@@ -11,7 +11,7 @@ import { useRef, useState } from "react";
 import { useGetMyContactQuery } from "../../../../redux/features/contact/contactApi";
 import { TContactList } from "../../../../types/contact.types";
 import AddNewContact from "./addNewContact/AddNewContact";
-import { useCreateChattingRoomMutation, useGetSingleMemberAllUserChatQuery } from "../../../../redux/features/chat/chatApi";
+import { useCreateChattingRoomMutation, } from "../../../../redux/features/chat/chatApi";
 import { TChatUser } from "../../../../types/chat.types";
 
 type sideberContactProps = {
@@ -26,7 +26,6 @@ const SideberContact = ({ handleSubMenuClick, setIsNewChatVisible }: sideberCont
   const [addContact, setAddContact] = useState(false);
   const { data: myContactData } = useGetMyContactQuery({});
   const [createChattingRoom] = useCreateChattingRoomMutation();
-  const { data: allUserChat } = useGetSingleMemberAllUserChatQuery({});
 
 
   const resetInput = () => {
@@ -39,7 +38,7 @@ const SideberContact = ({ handleSubMenuClick, setIsNewChatVisible }: sideberCont
     setIsNewChatVisible(false);
     await createChattingRoom({ connectUserId: userId }).unwrap();
     //  handleSubMenuClick(res?._id)
-    
+
   }
 
   return (
@@ -156,17 +155,19 @@ const SideberContact = ({ handleSubMenuClick, setIsNewChatVisible }: sideberCont
                 (contact: TContactList, index: number) => (
                   <div className="contactUser" key={index} onClick={() => handleCreateChattingRoom(contact?.userId)}>
                     <div>
-                      <svg
-                        className="contactUserIcon"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={50}
-                        viewBox="0 0 448 512"
-                      >
-                        <path
-                          d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"
-                          fill="rgb(197, 197, 197)"
-                        />
-                      </svg>
+                      {
+                        contact?.profileImg ? <img style={{ width: "48px", height: "48px", borderRadius: "50%" }} src={contact?.profileImg} /> : <svg
+                          className="contactUserIcon"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={50}
+                          viewBox="0 0 448 512"
+                        >
+                          <path
+                            d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"
+                            fill="rgb(197, 197, 197)"
+                          />
+                        </svg>
+                      }
                     </div>
                     <div className="contactUserInfo">
                       <div>

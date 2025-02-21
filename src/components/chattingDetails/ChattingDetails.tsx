@@ -25,6 +25,7 @@ type ChattingDetailsProps = {
 
 const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
   const currentUser = useAppSelector(selectCurrentUser);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const divRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const [hasContent, setHasContent] = useState(false);
@@ -96,6 +97,11 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
     setHasContent(false);
   };
 
+  const handleFileSelect = (file: File) => {
+    setSelectedFile(file);
+    // এখানে আপনি file নিয়ে যেকোনো লজিক করতে পারেন
+    console.log('Selected file from child:', file);
+  };
 
 
   return (
@@ -129,25 +135,33 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
 
         <div className="chatting-details-messagesPart" ref={chatContainerRef}>
           <div className="chatting-details-message-div">
-            {messages.map((msg, index: number) => (
-              <div key={index} className="chatting-details-message-div">
-                <div
-                  className={
-                    msg?.senderId && currentUser?.userId && msg.senderId === currentUser.userId
-                      ? "chatting-details-message-self"
-                      : "chatting-details-message-reciver"
-                  }
-                >
-                  <p style={{ margin: 0 }}>{msg.content} </p>
+            {
+              selectedFile ? <>  {selectedFile && (
+                <div>
+                  <p>Selected File: {selectedFile.name}</p>
                 </div>
-              </div>
-            ))}
+              )}</> : <>
+                {messages.map((msg, index: number) => (
+                  <div key={index} className="chatting-details-message-div">
+                    <div
+                      className={
+                        msg?.senderId && currentUser?.userId && msg.senderId === currentUser.userId
+                          ? "chatting-details-message-self"
+                          : "chatting-details-message-reciver"
+                      }
+                    >
+                      <p style={{ margin: 0 }}>{msg.content} </p>
+                    </div>
+                  </div>
+                ))}
+              </>
+            }
           </div>
         </div>
 
         <div className="chatting-details-bottomberPart">
           <div className="chatting-details-add-item">
-            <SendFiles />
+            <SendFiles onFileSelect={handleFileSelect} />
           </div>
           <div className="chatting-details-text">
             <div
