@@ -28,6 +28,7 @@ const SideberChat = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [isNewChatVisible, setIsNewChatVisible] = useState(false);
   const { data: allUserChat } = useGetSingleMemberAllUserChatQuery({});
+  console.log(allUserChat, 'alluserchat');
 
   const resetInput = () => {
     setInputValue("");
@@ -100,9 +101,8 @@ const SideberChat = ({
 
           {allUserChat?.data?.map((item: TChatUser, index: number) => (
             <div
-              className={`chattingUser ${
-                activeChatUser === item.chatId ? "activeChatUser" : ""
-              }`}
+              className={`chattingUser ${activeChatUser === item.chatId ? "activeChatUser" : ""
+                }`}
               key={index}
               onClick={() => handleSubMenuClick(item)}
             >
@@ -161,7 +161,7 @@ const SideberChat = ({
           </div>
         </div>
       ) : (
-        <SideberContact setIsNewChatVisible={setIsNewChatVisible} />
+        <SideberContact handleSubMenuClick={handleSubMenuClick} setIsNewChatVisible={setIsNewChatVisible} />
       )}
     </>
   );

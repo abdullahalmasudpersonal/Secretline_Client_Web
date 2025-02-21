@@ -1,4 +1,4 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faAddressBook, faCamera, faFile, faImage, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Menu, MenuItem, } from "@mui/material";
 import { useState } from "react";
@@ -7,12 +7,19 @@ import { useState } from "react";
 const SendFiles = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+    const [file, setFile] = useState<File | null>(null);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files.length > 0) {
+            setFile(event.target.files[0]);
+        }
         setAnchorEl(null);
     };
 
@@ -50,9 +57,20 @@ const SendFiles = () => {
                     horizontal: 'center',
                 }}
             >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem onClick={handleClose}><FontAwesomeIcon icon={faFile} /> &nbsp;Document</MenuItem>
+                <MenuItem component="label">
+                    <input
+                        accept="image/*,video/*"
+                        style={{ display: "none" }}
+                        id="upload-input"
+                        type="file"
+                        onChange={handleFileChange}
+                    />
+                    <FontAwesomeIcon icon={faImage} /> &nbsp; Photo & Video
+                </MenuItem>
+
+                <MenuItem onClick={handleClose}><FontAwesomeIcon icon={faCamera} /> &nbsp;Camera</MenuItem>
+                <MenuItem onClick={handleClose}><FontAwesomeIcon icon={faAddressBook} /> &nbsp;Contact</MenuItem>
             </Menu>
 
 

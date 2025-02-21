@@ -1,6 +1,5 @@
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import socket from "../../../utils/Socket";
 import { useRef, useState } from "react";
 import OutGoingAudioCallModal from "./audioAllModal/OutGoingAudioCallModal/OutGoingAudioCallModal";
 // import { useAppSelector } from "../../../redux/hooks";
@@ -14,9 +13,7 @@ type TAudioCallProps = {
 const OutGoingAudioCall = ({ activeUserId }: TAudioCallProps) => {
   // const currentUser = useAppSelector(selectCurrentUser);
   const [OutGoingAudioCallModalOpen, setOutGoingAudioCallModalOpen] = useState<boolean>(false);
-  const [outGoingAudioCall, setOutGoingAudioCall] = useState(false);
-  const [connectedUserId /* setConnectedUserId */] = useState<string>("");
-
+  const [outGoingAudioCall, /* setOutGoingAudioCall */] = useState(false);
   const localAudio = useRef<HTMLAudioElement>(null);
   const remoteAudio = useRef<HTMLAudioElement>(null);
   // const peerConnection = useRef<RTCPeerConnection>(
@@ -137,29 +134,7 @@ const OutGoingAudioCall = ({ activeUserId }: TAudioCallProps) => {
   //   console.log("ice candidate sender", sender);
   // });
   // একটি কিউ তৈরি করুন যেখানে ICE Candidate জমা রাখা হবে।
-  const pendingCandidates = useRef<RTCIceCandidateInit[]>([]);
 
-  // ICE Candidate রিসিভ এবং সেট করা
-  socket.on("ice-candidate", async ({ sender, candidate }) => {
-    if (candidate) {
-      if (peerConnection.current.remoteDescription) {
-        // Remote Description সেট করা থাকলে Candidate যোগ করুন
-        try {
-          await peerConnection.current.addIceCandidate(
-            new RTCIceCandidate(candidate)
-          );
-          console.log("ICE Candidate added successfully:", candidate);
-        } catch (error) {
-          console.error("Error adding ICE Candidate:", error);
-        }
-      } else {
-        // Remote Description সেট না থাকলে Candidate কিউতে জমা রাখুন
-        pendingCandidates.current.push(candidate);
-        console.log("Remote description not set yet. Candidate queued.");
-      }
-    }
-    console.log("ICE candidate sender", sender);
-  });
 
   // Remote Description সেট করার পর জমা রাখা আইস ক্যান্ডিডেট অ্যাড করুন
   // peerConnection.current.oniceconnectionstatechange = () => {

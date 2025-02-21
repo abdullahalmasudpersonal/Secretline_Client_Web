@@ -29,47 +29,77 @@ const AddNewContact = ({ setAddContact }: AddNewContactProps) => {
     reset,
     setError,
     clearErrors,
-    // formState: { errors },
   } = useForm<FormValues>();
+  const [selectedUser, setSelectedUser] = useState<TUser | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const [createNewContact] = useCreateNewContactMutation();
   const { data: allUserData } = useGetAllUserQuery({});
-  const alluseremail = allUserData?.data?.map((user: TUser) => user?.email);
+  const allUsers = allUserData?.data || [];
 
-  const checkExistsEmail = async (email: string) => {
-    const existingEmails = alluseremail;
-    return existingEmails.includes(email);
-  };
+  // const alluseremail = allUserData?.data?.map((user: TUser) => user?.email);
+  // // const checkExistsEmail = async (email: string) => {
+  // //   const existingEmails = alluseremail;
+  // //   return existingEmails.includes(email);
+  // // };
 
   const handleEmailCheck = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const email = e.target.value;
-
+    const email = e.target.value.trim();
     if (!email) {
       setEmailError(null);
+      setSelectedUser(null);
       clearErrors("email");
       return;
     }
 
-    const exists = await checkExistsEmail(email);
-    if (!exists) {
-      setEmailError("This email is not use secretline.");
+    const user = allUsers.find((user: TUser) => user.email === email);
+    if (!user) {
+      setEmailError("This email is not registered in SecretLine.");
+      setSelectedUser(null);
       setError("email", {
         type: "manual",
-        message: "This email is not use secretline.",
+        message: "This email is not registered in SecretLine.",
       });
     } else {
       setEmailError(null);
+      setSelectedUser(user);
       clearErrors("email");
     }
   };
 
+  // ফোন নাম্বার চেক করার ফাংশন
+  const handlePhoneCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const phone = e.target.value.trim();
+    if (!phone || !selectedUser) {
+      setPhoneError(null);
+      clearErrors("phone");
+      return;
+    }
+
+    if (selectedUser.phone !== phone) {
+      setPhoneError("This phone number does not match the email.");
+      setError("phone", {
+        type: "manual",
+        message: "This phone number does not match the email.",
+      });
+    } else {
+      setPhoneError(null);
+      clearErrors("phone");
+    }
+  };
+
   const onFinish: SubmitHandler<FormValues> = async (data) => {
-    // console.log(data, "data");
-    const res = await createNewContact(data);
-    if (res) {
-      toast.success("New contact create successfully");
-      reset();
-      setAddContact(false);
+    try {
+      const res = await createNewContact(data).unwrap();
+      if (res?.success) {
+        toast.success(res.message);
+        reset();
+        setAddContact(false);
+      }
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      toast.error((error as any)?.data?.message);
+      // reset();
     }
   };
 
@@ -124,12 +154,16 @@ const AddNewContact = ({ setAddContact }: AddNewContactProps) => {
               placeholder="Enter phone"
               autoComplete="off"
               className="addNewContactInput"
+              onChange={handlePhoneCheck}
             />
+          </div>
+          <div className="checkExistsEmailError">
+            {phoneError && <p>{phoneError}</p>}
           </div>
           <div className="saveNewContactDiv">
             <button
               className="saveNewContactButton"
-              disabled={!!emailError}
+              disabled={!!emailError || !!phoneError}
               type="submit"
             >
               Save

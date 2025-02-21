@@ -11,23 +11,36 @@ import { useRef, useState } from "react";
 import { useGetMyContactQuery } from "../../../../redux/features/contact/contactApi";
 import { TContactList } from "../../../../types/contact.types";
 import AddNewContact from "./addNewContact/AddNewContact";
+import { useCreateChattingRoomMutation, useGetSingleMemberAllUserChatQuery } from "../../../../redux/features/chat/chatApi";
+import { TChatUser } from "../../../../types/chat.types";
 
 type sideberContactProps = {
+  handleSubMenuClick: (value: TChatUser) => void;
   setIsNewChatVisible: (value: boolean) => void;
 };
 
-const SideberContact = ({ setIsNewChatVisible }: sideberContactProps) => {
+const SideberContact = ({ handleSubMenuClick, setIsNewChatVisible }: sideberContactProps) => {
   const [isFocused, setIsFocused] = useState(true);
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [addContact, setAddContact] = useState(false);
   const { data: myContactData } = useGetMyContactQuery({});
-  console.log(myContactData, "mycontactdata");
+  const [createChattingRoom] = useCreateChattingRoomMutation();
+  const { data: allUserChat } = useGetSingleMemberAllUserChatQuery({});
+
 
   const resetInput = () => {
     setInputValue("");
     inputRef.current?.focus();
   };
+
+  /// create chatting room
+  const handleCreateChattingRoom = async (userId: string) => {
+    setIsNewChatVisible(false);
+    await createChattingRoom({ connectUserId: userId }).unwrap();
+    //  handleSubMenuClick(res?._id)
+    
+  }
 
   return (
     <>
@@ -141,7 +154,7 @@ const SideberContact = ({ setIsNewChatVisible }: sideberContactProps) => {
               </p>
               {myContactData?.data?.contacts?.map(
                 (contact: TContactList, index: number) => (
-                  <div className="contactUser" key={index}>
+                  <div className="contactUser" key={index} onClick={() => handleCreateChattingRoom(contact?.userId)}>
                     <div>
                       <svg
                         className="contactUserIcon"

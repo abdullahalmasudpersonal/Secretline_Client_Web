@@ -84,6 +84,7 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
     const newMessage = {
       chatId: chatId,
       content: message,
+      senderId: currentUser?.userId,
       messageType: "text",
     };
 
@@ -132,7 +133,7 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
               <div key={index} className="chatting-details-message-div">
                 <div
                   className={
-                    msg?.senderId === currentUser?.userId
+                    msg?.senderId && currentUser?.userId && msg.senderId === currentUser.userId
                       ? "chatting-details-message-self"
                       : "chatting-details-message-reciver"
                   }

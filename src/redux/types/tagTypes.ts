@@ -3,7 +3,8 @@ export enum tagTypes {
   member = "member",
   message = "message",
   contact = "contact",
-  profile = "profile"
+  profile = "profile",
+  chat = "chat"
 }
 
 export type TagTypes = (typeof tagTypes)[keyof typeof tagTypes];
@@ -16,4 +17,5 @@ export const tagTypesList = [
   tagTypes.message,
   tagTypes.contact,
   tagTypes.profile,
+  tagTypes.chat
 ];
