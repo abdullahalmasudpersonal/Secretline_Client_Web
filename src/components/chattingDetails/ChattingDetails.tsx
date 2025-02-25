@@ -18,7 +18,6 @@ import { useGetSingleUserQuery } from "../../redux/features/user/userApi";
 import defaultProfileImg from '../../assets/porfile/profileImg.webp'
 import SendFiles from "./sendFiles/SendFiles";
 
-
 type ChattingDetailsProps = {
   activeSubMenu: TChatUser;
 };
@@ -68,16 +67,27 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
     }
   }, [messages]);
 
-  const handleInput = (/* e: React.FormEvent<HTMLDivElement> */) => {
-    const div = divRef.current;
-    if (div) {
-      if (div.textContent === "") {
-        div.innerHTML = "";
-      }
-      const text = div.textContent || "";
-      setMessage(text.trim());
-      setHasContent(text.length > 0);
+  // const handleInput = (/* e: React.FormEvent<HTMLDivElement> */) => {
+  //   const div = divRef.current;
+  //   if (div) {
+  //     if (div.textContent === "") {
+  //       div.innerHTML = "";
+  //     }
+  //     const text = div.textContent || "";
+  //     setMessage(text.trim());
+  //     setHasContent(text.length > 0);
+  //   }
+  // };
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const text = e.target.value;
+
+    setMessage(text);
+    if (textRef.current) {
+      textRef.current.style.height = "50px"; // Reset height
+      textRef.current.style.height = `${Math.min(textRef.current.scrollHeight, 150)}px`; // Max height 150px
     }
+    setHasContent(text.length > 0);
   };
 
   const handleSendMessage = async () => {
@@ -102,7 +112,6 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
     // এখানে আপনি file নিয়ে যেকোনো লজিক করতে পারেন
     console.log('Selected file from child:', file);
   };
-
 
   return (
     <>
@@ -139,6 +148,7 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
               selectedFile ? <>  {selectedFile && (
                 <div>
                   <p>Selected File: {selectedFile.name}</p>
+
                 </div>
               )}</> : <>
                 {messages.map((msg, index: number) => (
@@ -158,18 +168,29 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
             }
           </div>
         </div>
-
         <div className="chatting-details-bottomberPart">
+
           <div className="chatting-details-add-item">
             <SendFiles onFileSelect={handleFileSelect} />
           </div>
           <div className="chatting-details-text">
-            <div
+            {/* <div
               ref={divRef}
               contentEditable="true"
               onInput={handleInput}
               data-placeholder="Type here message..."
-            ></div>
+            ></div> */}
+            <textarea
+              ref={textRef}
+              value={message}
+              onChange={handleInput}
+              placeholder="Type your message..."
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
+              resize-none overflow-y-auto"
+              style={{ minHeight: "50px", maxHeight: "150px" }}
+            />
+
+
           </div>
 
           {hasContent ? (

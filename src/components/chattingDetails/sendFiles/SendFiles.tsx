@@ -19,6 +19,12 @@ const SendFiles = ({ onFileSelect }: SendFilesProps) => {
         setAnchorEl(null);
     };
 
+    /////////////////// images upload /////////////
+    const [fileList, setFileList] = useState([]);
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState("");
+    const [previewTitle, setPreviewTitle] = useState("");
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             setFile(event.target.files[0]);
@@ -69,6 +75,7 @@ const SendFiles = ({ onFileSelect }: SendFilesProps) => {
                         style={{ display: "none" }}
                         id="upload-input"
                         type="file"
+                        multiple
                         onChange={handleFileChange}
                     />
                     <FontAwesomeIcon icon={faImage} /> &nbsp; Photo & Video
