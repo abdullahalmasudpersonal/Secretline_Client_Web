@@ -11,12 +11,12 @@ function App() {
     socket.emit("userOnline", user?.userId);
   });
 
-
-  return <>
-    <IncomingAudioCall />
-    {user ? <Home /> : <Login />}
-
-  </>;
+  return (
+    <>
+      <IncomingAudioCall />
+      {user ? <Home /> : <Login />}
+    </>
+  );
 }
 
 export default App;

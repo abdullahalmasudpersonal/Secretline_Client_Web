@@ -6,6 +6,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { setUser, TUser } from "../../redux/features/auth/authSlice";
 import { verifyToken } from "../../utils/verifyToken";
+import DemoCriential from "./DemoCriential";
 
 type FormValues = {
   email: string;
@@ -109,6 +110,7 @@ const Login: React.FC = () => {
             <p style={{ margin: "0", color: "red" }}> {errorElement}</p>
             <a href="#">Forgot your password?</a>
             <button type="submit">Sign In</button>
+            <DemoCriential />
           </form>
         </div>
 

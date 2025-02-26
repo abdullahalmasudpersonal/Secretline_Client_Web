@@ -11,7 +11,7 @@ import { useRef, useState } from "react";
 import { useGetMyContactQuery } from "../../../../redux/features/contact/contactApi";
 import { TContactList } from "../../../../types/contact.types";
 import AddNewContact from "./addNewContact/AddNewContact";
-import { useCreateChattingRoomMutation, } from "../../../../redux/features/chat/chatApi";
+import { useCreateChattingRoomMutation } from "../../../../redux/features/chat/chatApi";
 import { TChatUser } from "../../../../types/chat.types";
 
 type sideberContactProps = {
@@ -19,14 +19,16 @@ type sideberContactProps = {
   setIsNewChatVisible: (value: boolean) => void;
 };
 
-const SideberContact = ({ handleSubMenuClick, setIsNewChatVisible }: sideberContactProps) => {
+const SideberContact = ({
+  // handleSubMenuClick,
+  setIsNewChatVisible,
+}: sideberContactProps) => {
   const [isFocused, setIsFocused] = useState(true);
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [addContact, setAddContact] = useState(false);
   const { data: myContactData } = useGetMyContactQuery({});
   const [createChattingRoom] = useCreateChattingRoomMutation();
-
 
   const resetInput = () => {
     setInputValue("");
@@ -38,8 +40,7 @@ const SideberContact = ({ handleSubMenuClick, setIsNewChatVisible }: sideberCont
     setIsNewChatVisible(false);
     await createChattingRoom({ connectUserId: userId }).unwrap();
     //  handleSubMenuClick(res?._id)
-
-  }
+  };
 
   return (
     <>
@@ -153,10 +154,23 @@ const SideberContact = ({ handleSubMenuClick, setIsNewChatVisible }: sideberCont
               </p>
               {myContactData?.data?.contacts?.map(
                 (contact: TContactList, index: number) => (
-                  <div className="contactUser" key={index} onClick={() => handleCreateChattingRoom(contact?.userId)}>
+                  <div
+                    className="contactUser"
+                    key={index}
+                    onClick={() => handleCreateChattingRoom(contact?.userId)}
+                  >
                     <div>
-                      {
-                        contact?.profileImg ? <img style={{ width: "48px", height: "48px", borderRadius: "50%" }} src={contact?.profileImg} /> : <svg
+                      {contact?.profileImg ? (
+                        <img
+                          style={{
+                            width: "48px",
+                            height: "48px",
+                            borderRadius: "50%",
+                          }}
+                          src={contact?.profileImg}
+                        />
+                      ) : (
+                        <svg
                           className="contactUserIcon"
                           xmlns="http://www.w3.org/2000/svg"
                           width={50}
@@ -167,7 +181,7 @@ const SideberContact = ({ handleSubMenuClick, setIsNewChatVisible }: sideberCont
                             fill="rgb(197, 197, 197)"
                           />
                         </svg>
-                      }
+                      )}
                     </div>
                     <div className="contactUserInfo">
                       <div>

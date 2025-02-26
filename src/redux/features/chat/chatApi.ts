@@ -7,17 +7,24 @@ const chatApi = baseApi.injectEndpoints({
       query: (data) => ({
         url: "/chat/create-chat",
         method: "POST",
-        body: data
+        body: data,
       }),
       invalidatesTags: [tagTypes.chat],
     }),
-    getSingleMemberAllUserChat: builder.query({
+    getAllChattingUserSingleMember: builder.query({
       query: () => ({
-        url: "/message/get-all-user-chat-single-member",
+        url: "/chat/get-all-chatting-user-single-member",
         method: "GET",
       }),
       providesTags: [tagTypes.message, tagTypes.chat],
     }),
+    // getSingleMemberAllUserChat: builder.query({
+    //   query: () => ({
+    //     url: "/message/get-all-user-chat-single-member",
+    //     method: "GET",
+    //   }),
+    //   providesTags: [tagTypes.message, tagTypes.chat],
+    // }),
     getSingleMemberSingleUserChat: builder.query({
       query: (chatId) => ({
         url: `/message/get-single-user-chat-single-member/${chatId}`,
@@ -30,6 +37,7 @@ const chatApi = baseApi.injectEndpoints({
 
 export const {
   useCreateChattingRoomMutation,
-  useGetSingleMemberAllUserChatQuery,
+  useGetAllChattingUserSingleMemberQuery,
+  // useGetAllChattingUserSingleMemberQuery,
   useGetSingleMemberSingleUserChatQuery,
 } = chatApi;

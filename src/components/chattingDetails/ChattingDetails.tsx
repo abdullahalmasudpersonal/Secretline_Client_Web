@@ -15,8 +15,27 @@ import { useCreateMessageMutation } from "../../redux/features/message/messageAp
 import socket from "../../utils/Socket";
 import OutGoingAudioCall from "./audioCall/OutGoingAudioCall";
 import { useGetSingleUserQuery } from "../../redux/features/user/userApi";
-import defaultProfileImg from '../../assets/porfile/profileImg.webp'
+import defaultProfileImg from "../../assets/porfile/profileImg.webp";
 import SendFiles from "./sendFiles/SendFiles";
+
+const makeLinksClickable = (text: string) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.split(urlRegex).map((part, index) =>
+    urlRegex.test(part) ? (
+      <a
+        key={index}
+        href={part}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-500 underline"
+      >
+        {part}
+      </a>
+    ) : (
+      part
+    )
+  );
+};
 
 type ChattingDetailsProps = {
   activeSubMenu: TChatUser;
@@ -67,27 +86,29 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
     }
   }, [messages]);
 
-  // const handleInput = (/* e: React.FormEvent<HTMLDivElement> */) => {
-  //   const div = divRef.current;
-  //   if (div) {
-  //     if (div.textContent === "") {
-  //       div.innerHTML = "";
-  //     }
-  //     const text = div.textContent || "";
-  //     setMessage(text.trim());
-  //     setHasContent(text.length > 0);
-  //   }
-  // };
-  const textRef = useRef<HTMLTextAreaElement>(null);
-  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const text = e.target.value;
-
-    setMessage(text);
-    if (textRef.current) {
-      textRef.current.style.height = "50px"; // Reset height
-      textRef.current.style.height = `${Math.min(textRef.current.scrollHeight, 150)}px`; // Max height 150px
+  const handleInput = (/* e: React.FormEvent<HTMLDivElement> */) => {
+    const div = divRef.current;
+    if (div) {
+      if (div.textContent === "") {
+        div.innerHTML = "";
+      }
+      const text = div.textContent || "";
+      setMessage(text.trim());
+      setHasContent(text.length > 0);
     }
-    setHasContent(text.length > 0);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // নতুন লাইন প্রতিরোধ করুন
+      handleSendMessage(); // সাবমিট ফাংশন কল করুন
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault(); // ডিফল্ট পেস্ট একশন বন্ধ করুন
+    const text = e.clipboardData.getData("text/plain"); // শুধু প্লেইন টেক্সট নিন
+    document.execCommand("insertText", false, text); // টেক্সট ইনসার্ট করুন
   };
 
   const handleSendMessage = async () => {
@@ -110,7 +131,7 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
   const handleFileSelect = (file: File) => {
     setSelectedFile(file);
     // এখানে আপনি file নিয়ে যেকোনো লজিক করতে পারেন
-    console.log('Selected file from child:', file);
+    console.log("Selected file from child:", file);
   };
 
   return (
@@ -118,14 +139,26 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
       <div className="chatting-details">
         <div className="chatting-details-topberPart">
           <div className="chatting-details-profile-img">
-            {activeUser?.isOnline ? <div style={{ width: "11px", height: "11px", borderRadius: "50%", backgroundColor: 'rgb(34, 153, 84)', position: 'absolute', marginTop: "28px", marginLeft: "30px" }}></div> : ""}
-            {profileImg ? <img
-              width="50px"
-              src={profileImg}
-            /> : <img
-              width="50px"
-              src={defaultProfileImg}
-            />}
+            {activeUser?.isOnline ? (
+              <div
+                style={{
+                  width: "11px",
+                  height: "11px",
+                  borderRadius: "50%",
+                  backgroundColor: "rgb(34, 153, 84)",
+                  position: "absolute",
+                  marginTop: "28px",
+                  marginLeft: "30px",
+                }}
+              ></div>
+            ) : (
+              ""
+            )}
+            {profileImg ? (
+              <img width="50px" src={profileImg} />
+            ) : (
+              <img width="50px" src={defaultProfileImg} />
+            )}
 
             <p style={{ margin: 0, fontWeight: 500 }}>{name}</p>
           </div>
@@ -144,53 +177,51 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
 
         <div className="chatting-details-messagesPart" ref={chatContainerRef}>
           <div className="chatting-details-message-div">
-            {
-              selectedFile ? <>  {selectedFile && (
-                <div>
-                  <p>Selected File: {selectedFile.name}</p>
-
-                </div>
-              )}</> : <>
+            {selectedFile ? (
+              <>
+                {" "}
+                {selectedFile && (
+                  <div>
+                    <p>Selected File: {selectedFile.name}</p>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
                 {messages.map((msg, index: number) => (
                   <div key={index} className="chatting-details-message-div">
                     <div
                       className={
-                        msg?.senderId && currentUser?.userId && msg.senderId === currentUser.userId
+                        msg?.senderId &&
+                        currentUser?.userId &&
+                        msg.senderId === currentUser.userId
                           ? "chatting-details-message-self"
                           : "chatting-details-message-reciver"
                       }
                     >
-                      <p style={{ margin: 0 }}>{msg.content} </p>
+                      <p style={{ margin: 0 }}>
+                        {makeLinksClickable(msg.content)}{" "}
+                      </p>
                     </div>
                   </div>
                 ))}
               </>
-            }
+            )}
           </div>
         </div>
         <div className="chatting-details-bottomberPart">
-
           <div className="chatting-details-add-item">
             <SendFiles onFileSelect={handleFileSelect} />
           </div>
           <div className="chatting-details-text">
-            {/* <div
+            <div
               ref={divRef}
               contentEditable="true"
               onInput={handleInput}
+              onKeyDown={handleKeyDown}
+              onPaste={handlePaste}
               data-placeholder="Type here message..."
-            ></div> */}
-            <textarea
-              ref={textRef}
-              value={message}
-              onChange={handleInput}
-              placeholder="Type your message..."
-              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
-              resize-none overflow-y-auto"
-              style={{ minHeight: "50px", maxHeight: "150px" }}
-            />
-
-
+            ></div>
           </div>
 
           {hasContent ? (
