@@ -11,7 +11,15 @@ const messageApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.message],
     }),
+    createVoiceMessage: builder.mutation({
+      query: (newVoiceMessage) => ({
+        url: "/message/send-voice-message",
+        method: "POST",
+        body: newVoiceMessage,
+      }),
+    }),
   }),
 });
 
-export const { useCreateMessageMutation } = messageApi;
+export const { useCreateMessageMutation, useCreateVoiceMessageMutation } =
+  messageApi;
