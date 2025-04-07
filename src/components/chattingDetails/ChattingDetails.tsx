@@ -24,6 +24,7 @@ import SendFiles from "./sendFiles/SendFiles";
 // import VoiceMessage from "./voiceMessage/VoiceMessage";
 
 const makeLinksClickable = (text: string) => {
+  if (!text) return "";
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.split(urlRegex).map((part, index) =>
     urlRegex.test(part) ? (
@@ -65,6 +66,10 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
     skipPollingIfUnfocused: true,
   });
   const { profileImg, user: activeUser } = activeUserData?.data || {};
+
+  const getMessageType = (content: string): "text" | "audio" => {
+    return /\.(mp3|wav|ogg|webm)$/i.test(content) ? "audio" : "text";
+  };
 
   // setMessages  সার্ভার থেকে মেসেজ লোড করুন
   useEffect(() => {
@@ -143,14 +148,56 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
   // ///////////////////////////////////////////
   const [recording, setRecording] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [isRecorded, setIsRecorded] = useState<boolean>(false);
+  // const [isRecorded, setIsRecorded] = useState<boolean>(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<BlobPart[]>([]);
   const [recordingTime, setRecordingTime] = useState<number>(0);
   const [soundLevel, setSoundLevel] = useState<number>(0);
 
+  // useEffect(() => {
+  //   let timer: NodeJS.Timeout | null = null;
+  //   let audioContext: AudioContext | null = null;
+  //   let analyser: AnalyserNode | null = null;
+  //   let microphone: MediaStreamAudioSourceNode | null = null;
+
+  //   if (recording) {
+  //     setRecordingTime(0);
+  //     timer = setInterval(() => {
+  //       setRecordingTime((prev) => prev + 1);
+  //     }, 1000);
+
+  //     // মাইক্রোফোন থেকে ইনপুট নেওয়া এবং স্পাইক তৈরি করা
+  //     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+  //       audioContext = new AudioContext();
+  //       analyser = audioContext.createAnalyser();
+  //       microphone = audioContext.createMediaStreamSource(stream);
+  //       microphone.connect(analyser);
+  //       analyser.fftSize = 256;
+  //       const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+  //       const updateSoundLevel = () => {
+  //         if (analyser) {
+  //           analyser.getByteFrequencyData(dataArray);
+  //           const avg = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+  //           setSoundLevel(avg);
+  //         }
+  //         requestAnimationFrame(updateSoundLevel);
+  //       };
+  //       updateSoundLevel();
+  //     });
+  //   } else {
+  //     clearInterval(timer);
+  //     setSoundLevel(0);
+  //   }
+
+  //   return () => {
+  //     clearInterval(timer);
+  //     if (audioContext) audioContext.close();
+  //   };
+  // }, [recording]);
+
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: NodeJS.Timeout | null = null;
     let audioContext: AudioContext | null = null;
     let analyser: AnalyserNode | null = null;
     let microphone: MediaStreamAudioSourceNode | null = null;
@@ -161,7 +208,6 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
         setRecordingTime((prev) => prev + 1);
       }, 1000);
 
-      // মাইক্রোফোন থেকে ইনপুট নেওয়া এবং স্পাইক তৈরি করা
       navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
         audioContext = new AudioContext();
         analyser = audioContext.createAnalyser();
@@ -181,12 +227,12 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
         updateSoundLevel();
       });
     } else {
-      clearInterval(timer);
+      if (timer) clearInterval(timer);
       setSoundLevel(0);
     }
 
     return () => {
-      clearInterval(timer);
+      if (timer) clearInterval(timer);
       if (audioContext) audioContext.close();
     };
   }, [recording]);
@@ -226,7 +272,7 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
           });
           const audioUrl = URL.createObjectURL(audioBlob);
           setAudioUrl(audioUrl);
-          setIsRecorded(true);
+          // setIsRecorded(true);
         };
 
         mediaRecorder.start();
@@ -243,20 +289,22 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
       const audioBlob = await response.blob(); // Blob-এ কনভার্ট করা
       const formData = new FormData();
       formData.append("audio", audioBlob, "voice-message.webm");
-      console.log(audioBlob, "audioBlob", audioUrl);
+      const newVoiceMessage = {
+        chatId: chatId,
+        messageType: "text",
+      };
+      formData.append("data", JSON.stringify(newVoiceMessage));
 
       try {
         const res = await sendVoiceMessage(formData).unwrap();
-        console.log(res);
-        //   if (res.ok) {
-        //     alert("Voice message sent successfully!");
-        //     cancelRecording();
-        //   } else {
-        //     alert("Failed to send voice message.");
-        //   }
-        // } catch (error) {
-        //   console.error("Error uploading voice message:", error);
-        // }
+        if (res) {
+          socket.emit("sendMessage", newVoiceMessage);
+        }
+        if (audioUrl) {
+          // 🎤 রেকর্ডিং মোড বন্ধ করে আবার টেক্সট ইনপুট মোডে ফিরিয়ে আনা
+          setAudioUrl(null);
+          setRecording(false);
+        }
       } catch (error) {
         console.error("Error uploading voice message:", error);
       }
@@ -323,14 +371,21 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
                       className={
                         msg?.senderId &&
                         currentUser?.userId &&
-                        msg.senderId === currentUser.userId
+                        msg?.senderId === currentUser?.userId
                           ? "chatting-details-message-self"
                           : "chatting-details-message-reciver"
                       }
                     >
-                      <p style={{ margin: 0 }}>
-                        {makeLinksClickable(msg.content)}{" "}
-                      </p>
+                      {getMessageType(msg?.content) === "audio" ? (
+                        <audio controls className="w-full">
+                          <source src={msg?.content} type="audio/webm" />
+                          আপনার ব্রাউজার অডিও সাপোর্ট করে না।
+                        </audio>
+                      ) : (
+                        <p style={{ margin: 0 }}>
+                          {makeLinksClickable(msg.content)}{" "}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -379,9 +434,11 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
               )}
               {/* 🎵 রেকর্ডেড অডিও প্লে অপশন */}
               {audioUrl && !recording && (
-                <audio controls>
-                  <source src={audioUrl} type="audio/webm" />
-                </audio>
+                <div style={{ marginRight: "15px" }}>
+                  <audio controls>
+                    <source src={audioUrl} type="audio/webm" />
+                  </audio>
+                </div>
               )}
               <FontAwesomeIcon
                 onClick={toggleRecording}
@@ -394,11 +451,13 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
                   cursor: "pointer",
                 }}
               />
-              <FontAwesomeIcon
-                className="chatting-details-send-icon"
-                icon={faPaperPlane}
-                onClick={handleVoiceMessage}
-              />
+              <div style={{ marginLeft: "10px" }}>
+                <FontAwesomeIcon
+                  className="chatting-details-send-icon"
+                  icon={faPaperPlane}
+                  onClick={handleVoiceMessage}
+                />
+              </div>
             </div>
           ) : (
             <>
@@ -442,12 +501,3 @@ const ChattingDetails: React.FC<ChattingDetailsProps> = ({ activeSubMenu }) => {
 };
 
 export default ChattingDetails;
-
-{
-  /* <VoiceMessage
-                recording={recording}
-                setRecording={setRecording}
-                audioUrl={audioUrl}
-                setAudioUrl={setAudioUrl}
-              /> */
-}
