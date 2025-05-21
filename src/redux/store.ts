@@ -13,16 +13,16 @@ import storage from "redux-persist/lib/storage";
 import { baseApi } from "./api/baseApi";
 import authReducer from "./features/auth/authSlice";
 
-const parsistConfig = {
+const persistConfig = {
   key: "auth",
   storage,
 };
 
-const parsistedAuthReducer = persistReducer(parsistConfig, authReducer);
+const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
-    auth: parsistedAuthReducer,
+    auth: persistedAuthReducer,
   },
   middleware: (getDefaultMiddlewares) =>
     getDefaultMiddlewares({
